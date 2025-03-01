@@ -1,19 +1,46 @@
 {
   "name": "react-word-cloud",
-  "private": true,
-  "version": "0.0.0",
+  "private": false,
+  "version": "1.0.0",
   "type": "module",
+  "author": "Imran Abdumalik <imranabdulmalik01@gmail.com>",
+  "description": "A React word cloud component using d3-cloud, with optional Web Worker support for smooth, non-blocking layouts",
+  "homepage": "https://github.com/isoteriksoftware/react-word-cloud#readme",
+  "license": "MIT",
+  "keywords": [
+    "word-cloud",
+    "cloud",
+    "react-cloud",
+    "react-word-cloud",
+    "react word cloud",
+    "react",
+    "d3-cloud",
+    "d3"
+  ],
+  "main": "./dist/react-word-cloud.umd.js",
+  "module": "./dist/react-word-cloud.es.js",
+  "types": "./dist/index.d.ts",
   "scripts": {
-    "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "eslint .",
+    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'",
+    "format": "prettier --write src//**/*.{ts,tsx} --config ./.prettierrc",
     "preview": "vite preview",
     "prepare": "husky install"
   },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/isoteriksoftware/react-word-cloud"
+  },
+  "bugs": {
+    "url": "https://github.com/isoteriksoftware/react-word-cloud/issues"
+  },
   "dependencies": {
-    "d3-cloud": "^1.2.7",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0"
+    "d3-cloud": "^1.2.7"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
     "@eslint/js": "^9.21.0",
@@ -25,8 +52,33 @@
     "eslint-plugin-react-refresh": "^0.4.19",
     "globals": "^15.15.0",
     "husky": "^8.0.0",
+    "lint-staged": "^15.4.3",
+    "prettier": "^3.5.2",
     "typescript": "~5.7.2",
     "typescript-eslint": "^8.24.1",
-    "vite": "^6.2.0"
+    "vite": "^6.2.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "lint-staged": {
+    "src/**/*.{js,jsx,ts,tsx}": [
+      "npm run  lint",
+      "npm run format"
+    ]
+  },
+  "files": [
+    "dist"
+  ],
+  "exports": {
+    ".": {
+      "import": "./dist/react-word-cloud.es.js",
+      "require": "./dist/react-word-cloud.umd.js",
+      "types": "./dist/index.d.ts"
+    }
   }
 }
