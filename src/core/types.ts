@@ -3,12 +3,12 @@ import cloud from "d3-cloud";
 
 export type Word = {
   text: string;
-  size: number;
+  value: number;
 };
 
-export type ComputedWord = cloud.Word;
+export type ComputedWord = Word & Required<cloud.Word>;
 
-export type ValueOrAccessor<Value> = Value | ((datum: Partial<Word>, datumIndex: number) => Value);
+export type ValueOrAccessor<Value> = Value | ((datum: ComputedWord, datumIndex: number) => Value);
 
 export type FontValue = ValueOrAccessor<Property.FontFamily>;
 export type FontStyleValue = ValueOrAccessor<Property.FontStyle>;
@@ -26,20 +26,23 @@ export type RandomNumberGenerator = () => number;
 
 export type FillValue = ValueOrAccessor<Property.Color>;
 
-export type WorkerMessage = {
-  requestId: number;
+export type WordCloudConfig = {
   words: Word[];
-  layoutWidth: number;
-  layoutHeight: number;
+  width: number;
+  height: number;
   timeInterval?: number;
   spiral?: SpiralValue;
   padding?: PaddingValue;
   random?: RandomNumberGenerator;
-  fontFamily?: FontValue;
+  font?: FontValue;
   fontStyle?: FontStyleValue;
   fontWeight?: FontWeightValue;
   fontSize?: FontSizeValue;
   rotate?: RotateValue;
+};
+
+export type WorkerMessage = WordCloudConfig & {
+  requestId: number;
 };
 
 export type WorkerResponse = {

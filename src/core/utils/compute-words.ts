@@ -1,16 +1,16 @@
-import { ComputedWord, WorkerMessage } from "../types";
+import { ComputedWord, WordCloudConfig } from "../types";
 import cloud from "d3-cloud";
 
-export const computeWords = (config: Omit<WorkerMessage, "requestId">): Promise<ComputedWord[]> => {
+export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> => {
   const {
     words,
-    layoutWidth,
-    layoutHeight,
+    width,
+    height,
     timeInterval,
     spiral,
     padding,
     random,
-    fontFamily,
+    font,
     fontStyle,
     fontWeight,
     fontSize,
@@ -18,7 +18,7 @@ export const computeWords = (config: Omit<WorkerMessage, "requestId">): Promise<
   } = config;
 
   return new Promise((resolve) => {
-    const layout = cloud<cloud.Word>().size([layoutWidth, layoutHeight]).words(words);
+    const layout = cloud<cloud.Word>().size([width, height]).words(words);
 
     if (timeInterval) {
       layout.timeInterval(timeInterval);
@@ -36,28 +36,42 @@ export const computeWords = (config: Omit<WorkerMessage, "requestId">): Promise<
       layout.random(random);
     }
 
-    if (fontFamily) {
-      layout.font(fontFamily);
+    if (font) {
+      layout.font((datum, index) => {
+        return typeof font === "function" ? font(datum as ComputedWord, index) : font;
+      });
     }
 
     if (fontStyle) {
-      layout.fontStyle(fontStyle);
+      layout.fontStyle((datum, index) => {
+        return typeof fontStyle === "function"
+          ? fontStyle(datum as ComputedWord, index)
+          : fontStyle;
+      });
     }
 
     if (fontWeight) {
-      layout.fontWeight(fontWeight);
+      layout.fontWeight((datum, index) => {
+        return typeof fontWeight === "function"
+          ? fontWeight(datum as ComputedWord, index)
+          : fontWeight;
+      });
     }
 
     if (fontSize) {
-      layout.fontSize(fontSize);
+      layout.fontSize((datum, index) => {
+        return typeof fontSize === "function" ? fontSize(datum as ComputedWord, index) : fontSize;
+      });
     }
 
     if (rotate) {
-      layout.rotate(rotate);
+      layout.rotate((datum, index) => {
+        return typeof rotate === "function" ? rotate(datum as ComputedWord, index) : rotate;
+      });
     }
 
     layout.on("end", (computedWords) => {
-      resolve(computedWords);
+      resolve(computedWords as ComputedWord[]);
     });
 
     layout.start();
