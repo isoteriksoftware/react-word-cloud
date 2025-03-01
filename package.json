@@ -8,11 +8,11 @@
   "homepage": "https://github.com/isoteriksoftware/react-word-cloud#readme",
   "license": "MIT",
   "keywords": [
-    "word-cloud",
-    "cloud",
     "react-cloud",
     "react-word-cloud",
     "react word cloud",
+    "word-cloud",
+    "cloud",
     "react",
     "d3-cloud",
     "d3"
@@ -22,9 +22,10 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -b && vite build",
-    "lint": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
-    "lint:fix": "eslint --fix 'src/**/*.{jsx,ts,tsx}'",
-    "format": "prettier --write src//**/*.{ts,tsx} --config ./.prettierrc",
+    "build:local": "npm run build && npx yalc publish",
+    "lint": "eslint 'src/**/*.{ts,tsx}'",
+    "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
+    "format": "prettier --write src/**/*.{ts,tsx} --config ./.prettierrc",
     "preview": "vite preview",
     "prepare": "husky install"
   },
@@ -58,11 +59,12 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "typescript": "~5.7.2",
-    "typescript-eslint": "^8.24.1",
+    "typescript-eslint": "^8.25.0",
     "vite": "^6.2.0",
     "vite-plugin-dts": "^4.5.1",
     "vite-plugin-linter": "^3.0.1",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "yalc": "^1.0.0-pre.53"
   },
   "husky": {
     "hooks": {
@@ -70,8 +72,8 @@
     }
   },
   "lint-staged": {
-    "src/**/*.{js,jsx,ts,tsx}": [
-      "npm run  lint",
+    "src/**/*.{ts,tsx}": [
+      "npm run lint",
       "npm run format"
     ]
   },
@@ -80,9 +82,9 @@
   ],
   "exports": {
     ".": {
+      "types": "./dist/index.d.ts",
       "import": "./dist/react-word-cloud.es.js",
-      "require": "./dist/react-word-cloud.umd.js",
-      "types": "./dist/index.d.ts"
+      "require": "./dist/react-word-cloud.umd.js"
     }
   }
 }
