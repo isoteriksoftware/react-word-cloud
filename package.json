@@ -22,7 +22,7 @@
   "types": "./dist/index.d.ts",
   "scripts": {
     "build": "tsc -b && vite build",
-    "build:local": "npm run build && npx yalc publish",
+    "build:local": "npm run build && npx yalc push",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
     "format": "prettier --write src/**/*.{ts,tsx} --config ./.prettierrc",
