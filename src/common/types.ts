@@ -15,6 +15,7 @@ export type FontValue = ValueOrAccessor<Property.FontFamily>;
 export type FontStyleValue = ValueOrAccessor<Property.FontStyle>;
 export type FontWeightValue = ValueOrAccessor<Property.FontWeight>;
 export type FontSizeValue = ValueOrAccessor<number>;
+export type TransitionValue = ValueOrAccessor<Property.Transition>;
 export type RotateValue = Accessor<number>;
 
 export type WordCloudSize = [width: number, height: number];

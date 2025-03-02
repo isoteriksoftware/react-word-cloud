@@ -5,6 +5,7 @@ import {
   FontSizeValue,
   RandomNumberGenerator,
   RotateValue,
+  TransitionValue,
   WordCloudConfig,
 } from "../../common";
 import { scaleOrdinal } from "d3-scale";
@@ -20,6 +21,7 @@ const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
 
 export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
+  transition?: TransitionValue;
 };
 
 const Cloud = ({
@@ -28,6 +30,7 @@ const Cloud = ({
   fontStyle = "normal",
   fontWeight = "normal",
   fontSize = defaultFontSize,
+  transition = "all 1s ease",
   rotate = defaultRotate,
   spiral = "archimedean",
   padding = 1,
@@ -84,7 +87,7 @@ const Cloud = ({
       <g transform={`translate(${width / 2},${height / 2})`}>
         {computedWords.map((word, index) => (
           <text
-            key={index}
+            key={word.text}
             textAnchor="middle"
             transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
             style={{
@@ -93,6 +96,7 @@ const Cloud = ({
               fontWeight: word.weight,
               fontSize: word.size,
               fill: typeof fill === "function" ? fill(word, index) : fill,
+              transition: typeof transition === "function" ? transition(word, index) : transition,
             }}
           >
             {word.text}
