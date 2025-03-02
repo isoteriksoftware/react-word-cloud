@@ -1,6 +1,7 @@
 import {
   ComputedWord,
   computeWords,
+  CustomTextProps,
   FillValue,
   FontSizeValue,
   RandomNumberGenerator,
@@ -22,6 +23,7 @@ const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
 export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
   transition?: TransitionValue;
+  customTextProps?: CustomTextProps;
 };
 
 const Cloud = ({
@@ -30,7 +32,7 @@ const Cloud = ({
   fontStyle = "normal",
   fontWeight = "normal",
   fontSize = defaultFontSize,
-  transition = "all 1s ease",
+  transition = "all .5s ease",
   rotate = defaultRotate,
   spiral = "archimedean",
   padding = 1,
@@ -39,6 +41,7 @@ const Cloud = ({
   height,
   timeInterval,
   words,
+  customTextProps,
 }: WordCloudProps) => {
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
   const { loadingStateCache, setIsLoading } = useLoading();
@@ -85,23 +88,30 @@ const Cloud = ({
   return (
     <svg viewBox={`0 0 ${width} ${height}`}>
       <g transform={`translate(${width / 2},${height / 2})`}>
-        {computedWords.map((word, index) => (
-          <text
-            key={word.text}
-            textAnchor="middle"
-            transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
-            style={{
-              fontFamily: word.font,
-              fontStyle: word.style,
-              fontWeight: word.weight,
-              fontSize: word.size,
-              fill: typeof fill === "function" ? fill(word, index) : fill,
-              transition: typeof transition === "function" ? transition(word, index) : transition,
-            }}
-          >
-            {word.text}
-          </text>
-        ))}
+        {computedWords.map((word, index) => {
+          const defaultStyle = {
+            fontFamily: word.font,
+            fontStyle: word.style,
+            fontWeight: word.weight,
+            fontSize: word.size,
+            fill: typeof fill === "function" ? fill(word, index) : fill,
+            transition: typeof transition === "function" ? transition(word, index) : transition,
+          };
+          const customProps = customTextProps ? customTextProps(word, index) : {};
+          const mergedStyle = { ...defaultStyle, ...customProps.style };
+
+          return (
+            <text
+              key={word.text}
+              textAnchor="middle"
+              transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
+              {...customProps}
+              style={mergedStyle}
+            >
+              {word.text}
+            </text>
+          );
+        })}
       </g>
     </svg>
   );

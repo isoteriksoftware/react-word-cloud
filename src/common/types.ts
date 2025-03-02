@@ -1,5 +1,6 @@
 import { Property } from "csstype";
 import cloud from "d3-cloud";
+import { SVGProps } from "react";
 
 export type Word = {
   text: string;
@@ -8,7 +9,7 @@ export type Word = {
 
 export type ComputedWord = Word & Required<cloud.Word>;
 
-export type Accessor<Value> = (datum: ComputedWord, datumIndex: number) => Value;
+export type Accessor<Value> = (word: ComputedWord, wordIndex: number) => Value;
 export type ValueOrAccessor<Value> = Value | Accessor<Value>;
 
 export type FontValue = ValueOrAccessor<Property.FontFamily>;
@@ -17,6 +18,7 @@ export type FontWeightValue = ValueOrAccessor<Property.FontWeight>;
 export type FontSizeValue = ValueOrAccessor<number>;
 export type TransitionValue = ValueOrAccessor<Property.Transition>;
 export type RotateValue = Accessor<number>;
+export type CustomTextProps = Accessor<SVGProps<SVGTextElement>>;
 
 export type WordCloudSize = [width: number, height: number];
 export type SpiralValue =
