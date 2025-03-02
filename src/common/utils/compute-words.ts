@@ -1,7 +1,10 @@
 import { ComputedWord, WordCloudConfig } from "../types";
 import cloud from "d3-cloud";
 
-export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> => {
+export const computeWords = (
+  config: WordCloudConfig,
+  canvas?: HTMLCanvasElement,
+): Promise<ComputedWord[]> => {
   const {
     words,
     width,
@@ -20,6 +23,10 @@ export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> =
   return new Promise((resolve) => {
     const layout = cloud<cloud.Word>().size([width, height]).words(words);
 
+    if (canvas) {
+      layout.canvas(() => canvas);
+    }
+
     if (timeInterval) {
       layout.timeInterval(timeInterval);
     }
@@ -28,12 +35,14 @@ export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> =
       layout.spiral(spiral);
     }
 
-    if (padding) {
-      layout.padding(padding);
-    }
-
     if (random) {
       layout.random(random);
+    }
+
+    if (padding) {
+      layout.padding((datum, index) => {
+        return typeof padding === "function" ? padding(datum as ComputedWord, index) : padding;
+      });
     }
 
     if (font) {

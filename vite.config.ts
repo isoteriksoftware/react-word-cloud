@@ -7,6 +7,7 @@ import { EsLinter, linterPlugin } from "vite-plugin-linter";
 import * as packageJson from "./package.json";
 
 export default defineConfig((configEnv) => ({
+  base: "./",
   plugins: [
     react(),
     tsConfigPaths(),
@@ -20,6 +21,7 @@ export default defineConfig((configEnv) => ({
     }),
   ],
   build: {
+    minify: false,
     lib: {
       entry: resolve("src", "index.ts"),
       name: "react-word-cloud",

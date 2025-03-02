@@ -11,6 +11,7 @@ export type ComputedWord = Word & Required<cloud.Word>;
 
 export type Accessor<Value> = (word: ComputedWord, wordIndex: number) => Value;
 export type ValueOrAccessor<Value> = Value | Accessor<Value>;
+export type SerializedAccessor = string;
 
 export type FontValue = ValueOrAccessor<Property.FontFamily>;
 export type FontStyleValue = ValueOrAccessor<Property.FontStyle>;
@@ -25,7 +26,7 @@ export type SpiralValue =
   | "archimedean"
   | "rectangular"
   | ((size: WordCloudSize) => (currentStep: number) => [x: number, y: number]);
-export type PaddingValue = number | (() => number);
+export type PaddingValue = ValueOrAccessor<number>;
 export type RandomNumberGenerator = () => number;
 
 export type FillValue = ValueOrAccessor<Property.Color>;
@@ -43,4 +44,26 @@ export type WordCloudConfig = {
   fontWeight?: FontWeightValue;
   fontSize?: FontSizeValue;
   rotate?: RotateValue;
+};
+
+export type WorkerMessage = Pick<WordCloudConfig, "words" | "width" | "height" | "timeInterval"> & {
+  requestId: number;
+  spiral?: SerializedAccessor;
+  padding?: SerializedAccessor;
+  random?: SerializedAccessor;
+  font?: SerializedAccessor;
+  fontStyle?: SerializedAccessor;
+  fontWeight?: SerializedAccessor;
+  fontSize?: SerializedAccessor;
+  rotate?: SerializedAccessor;
+};
+
+export type WorkerResponse = {
+  requestId: number;
+  computedWords: ComputedWord[];
+};
+
+export type WordCloudWorker = Worker & {
+  onmessage: (evt: MessageEvent<WorkerResponse>) => void;
+  postMessage: (this: Worker, message: MessageEvent<WorkerMessage>) => void;
 };

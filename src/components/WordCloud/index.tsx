@@ -6,17 +6,21 @@ import {
   FontSizeValue,
   RandomNumberGenerator,
   RotateValue,
+  serializeAccessor,
   TransitionValue,
   WordCloudConfig,
+  WordCloudWorker,
+  WorkerMessage,
+  WorkerResponse,
 } from "../../common";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
-import { CSSProperties, memo, ReactNode, useEffect, useState } from "react";
+import { CSSProperties, memo, ReactNode, useEffect, useRef, useState } from "react";
 import { useLoading } from "../../common/hooks";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
-const defaultRandom: RandomNumberGenerator = Math.random;
+const defaultRandom: RandomNumberGenerator = () => Math.random();
 const defaultRotate: RotateValue = () => (~~(Math.random() * 6) - 3) * 30;
 const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
 
@@ -54,6 +58,7 @@ const defaultLoader = (
 export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
   transition?: TransitionValue;
+  useWorker?: boolean;
   customTextProps?: CustomTextProps;
   loader?: ReactNode;
   containerStyle?: CSSProperties;
@@ -72,6 +77,7 @@ const Cloud = ({
   padding = 1,
   random = defaultRandom,
   loader = defaultLoader,
+  useWorker,
   width,
   height,
   timeInterval,
@@ -82,6 +88,33 @@ const Cloud = ({
 }: WordCloudProps) => {
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
   const { isLoading, loadingStateCache, setIsLoading } = useLoading();
+
+  const workerRef = useRef<WordCloudWorker | null>(null);
+  const latestWorkerRequestId = useRef<number>(0);
+
+  useEffect(() => {
+    if (useWorker) {
+      workerRef.current = new Worker(
+        new URL("../../common/workers/word-cloud-worker.ts?worker", import.meta.url),
+        { type: "module" },
+      ) as WordCloudWorker;
+
+      workerRef.current!.onmessage = (evt: MessageEvent<WorkerResponse>) => {
+        if (evt.data.requestId === latestWorkerRequestId.current) {
+          setComputedWords(evt.data.computedWords);
+          setIsLoading(false);
+        }
+      };
+    }
+
+    return () => {
+      if (workerRef.current) {
+        workerRef.current.terminate();
+        workerRef.current = null;
+      }
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [useWorker]);
 
   useEffect(() => {
     if (loadingStateCache.current) return;
@@ -103,9 +136,42 @@ const Cloud = ({
       words,
     };
 
-    computeWords(finalConfig)
-      .then((computedWords) => setComputedWords(computedWords))
-      .finally(() => setIsLoading(false));
+    if (useWorker && workerRef.current) {
+      // Increment the request ID for each new calculation
+      const requestId = latestWorkerRequestId.current + 1;
+      latestWorkerRequestId.current = requestId;
+
+      // Serialize the configuration
+      const workerMessage: WorkerMessage = {
+        requestId,
+        width,
+        height,
+        timeInterval,
+        words,
+        spiral: serializeAccessor(spiral),
+        padding: serializeAccessor(padding),
+        random: serializeAccessor(random),
+        font: serializeAccessor(font),
+        fontStyle: serializeAccessor(fontStyle),
+        fontWeight: serializeAccessor(fontWeight),
+        fontSize: serializeAccessor(fontSize),
+        rotate: serializeAccessor(rotate),
+      };
+
+      // Send a message to the worker
+      try {
+        console.log({ workerMessage });
+        workerRef.current.postMessage(workerMessage);
+      } catch (error) {
+        console.error("Failed to post message to worker", error);
+        setIsLoading(false);
+      }
+    } else {
+      // Run on the main thread
+      computeWords(finalConfig)
+        .then((computedWords) => setComputedWords(computedWords))
+        .finally(() => setIsLoading(false));
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     height,
@@ -120,6 +186,7 @@ const Cloud = ({
     fontSize,
     rotate,
     random,
+    useWorker,
   ]);
 
   return (
