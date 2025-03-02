@@ -31,6 +31,8 @@ export type WordCloudProps = WordCloudConfig & {
   loader?: ReactNode;
   containerStyle?: CSSProperties;
   loaderContainerStyle?: CSSProperties;
+  onLoadStart?: () => void;
+  onLoadComplete?: () => void;
 };
 
 const Cloud = ({
@@ -52,12 +54,24 @@ const Cloud = ({
   customTextProps,
   containerStyle,
   loaderContainerStyle,
+  onLoadStart,
+  onLoadComplete,
 }: WordCloudProps) => {
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
   const [isLoading, setIsLoading] = useState(false);
 
   const workerRef = useRef<WordCloudWorker | null>(null);
   const latestWorkerRequestId = useRef<number>(0);
+
+  const handleLoadStart = () => {
+    setIsLoading(true);
+    onLoadStart?.();
+  };
+
+  const handleLoadComplete = () => {
+    setIsLoading(false);
+    onLoadComplete?.();
+  };
 
   useEffect(() => {
     if (useWorker) {
@@ -69,7 +83,7 @@ const Cloud = ({
       workerRef.current!.onmessage = (evt: MessageEvent<WorkerResponse>) => {
         if (evt.data.requestId === latestWorkerRequestId.current) {
           setComputedWords(evt.data.computedWords);
-          setIsLoading(false);
+          handleLoadComplete();
         }
       };
     }
@@ -80,6 +94,7 @@ const Cloud = ({
         workerRef.current = null;
       }
     };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useWorker]);
 
   useEffect(() => {
@@ -100,7 +115,7 @@ const Cloud = ({
     };
 
     if (useWorker && workerRef.current) {
-      setIsLoading(true);
+      handleLoadStart();
 
       // Increment the request ID for each new calculation
       const requestId = latestWorkerRequestId.current + 1;
@@ -125,12 +140,12 @@ const Cloud = ({
       // Send a message to the worker
       workerRef.current.postMessage(workerMessage);
     } else if (!useWorker) {
-      setIsLoading(true);
+      handleLoadStart();
 
       // Run on the main thread
       computeWords(finalConfig)
         .then((computedWords) => setComputedWords(computedWords))
-        .finally(() => setIsLoading(false));
+        .finally(() => handleLoadComplete());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
