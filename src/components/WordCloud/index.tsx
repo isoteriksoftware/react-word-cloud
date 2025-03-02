@@ -80,7 +80,7 @@ const Cloud = ({
   ]);
 
   return (
-    <svg width={width} height={height}>
+    <svg viewBox={`0 0 ${width} ${height}`}>
       <g transform={`translate(${width / 2},${height / 2})`}>
         {computedWords.map((word, index) => (
           <text
