@@ -1,27 +1,16 @@
-import {
-  RandomNumberGenerator,
-  SerializedAccessor,
-  SpiralValue,
-  ValueOrAccessor,
-} from "../types.ts";
+import { ValueOrAccessor, Word, WorkerResolvedValue } from "../types.ts";
 
-export const serializeAccessor = <Value>(
-  accessor: ValueOrAccessor<Value> | SpiralValue | RandomNumberGenerator | undefined,
-): SerializedAccessor | undefined => {
+export const mapAccessorResults = <Value, Accessor extends ValueOrAccessor<Value>>(
+  words: Word[],
+  accessor?: Accessor,
+): WorkerResolvedValue<Accessor> => {
   if (accessor === undefined) {
     return undefined;
   }
 
-  const fn = typeof accessor === "function" ? accessor : () => accessor;
-  return fn.toString();
-};
-
-export const deserializeAccessor = <Accessor>(
-  serializedAccessor: SerializedAccessor | undefined,
-): Accessor | undefined => {
-  if (serializedAccessor === undefined) {
-    return undefined;
+  if (typeof accessor === "function") {
+    return words.map((word, index) => accessor(word, index));
   }
 
-  return eval(`(${serializedAccessor})`);
+  return accessor as WorkerResolvedValue<Accessor>;
 };

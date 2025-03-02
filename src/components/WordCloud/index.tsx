@@ -4,9 +4,8 @@ import {
   CustomTextProps,
   FillValue,
   FontSizeValue,
-  RandomNumberGenerator,
+  mapAccessorResults,
   RotateValue,
-  serializeAccessor,
   TransitionValue,
   WordCloudConfig,
   WordCloudWorker,
@@ -20,7 +19,6 @@ import { useLoading } from "../../common/hooks";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
-const defaultRandom: RandomNumberGenerator = () => Math.random();
 const defaultRotate: RotateValue = () => (~~(Math.random() * 6) - 3) * 30;
 const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
 
@@ -75,7 +73,6 @@ const Cloud = ({
   rotate = defaultRotate,
   spiral = "archimedean",
   padding = 1,
-  random = defaultRandom,
   loader = defaultLoader,
   useWorker,
   width,
@@ -129,7 +126,6 @@ const Cloud = ({
       rotate,
       spiral,
       padding,
-      random,
       width,
       height,
       timeInterval,
@@ -148,14 +144,13 @@ const Cloud = ({
         height,
         timeInterval,
         words,
-        spiral: serializeAccessor(spiral),
-        padding: serializeAccessor(padding),
-        random: serializeAccessor(random),
-        font: serializeAccessor(font),
-        fontStyle: serializeAccessor(fontStyle),
-        fontWeight: serializeAccessor(fontWeight),
-        fontSize: serializeAccessor(fontSize),
-        rotate: serializeAccessor(rotate),
+        spiral,
+        padding: mapAccessorResults(words, padding),
+        font: mapAccessorResults(words, font),
+        fontStyle: mapAccessorResults(words, fontStyle),
+        fontWeight: mapAccessorResults(words, fontWeight),
+        fontSize: mapAccessorResults(words, fontSize),
+        rotate: mapAccessorResults(words, rotate),
       };
 
       // Send a message to the worker
@@ -185,7 +180,6 @@ const Cloud = ({
     fontWeight,
     fontSize,
     rotate,
-    random,
     useWorker,
   ]);
 

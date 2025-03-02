@@ -1,2 +1,2 @@
-export * from "./compute-words";
+export * from "./compute";
 export * from "./helpers";
