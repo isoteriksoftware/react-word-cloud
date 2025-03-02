@@ -30,43 +30,47 @@ export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> =
     }
 
     if (padding) {
-      layout.padding((datum, index) => {
-        return typeof padding === "function" ? padding(datum as ComputedWord, index) : padding;
-      });
+      if (typeof padding === "function") {
+        layout.padding((datum, index) => padding(datum as ComputedWord, index));
+      } else {
+        layout.padding(padding);
+      }
     }
 
     if (font) {
-      layout.font((datum, index) => {
-        return typeof font === "function" ? font(datum as ComputedWord, index) : font;
-      });
+      if (typeof font === "function") {
+        layout.font((datum, index) => font(datum as ComputedWord, index));
+      } else {
+        layout.font(font);
+      }
     }
 
     if (fontStyle) {
-      layout.fontStyle((datum, index) => {
-        return typeof fontStyle === "function"
-          ? fontStyle(datum as ComputedWord, index)
-          : fontStyle;
-      });
+      if (typeof fontStyle === "function") {
+        layout.fontStyle((datum, index) => fontStyle(datum as ComputedWord, index));
+      } else {
+        layout.fontStyle(fontStyle);
+      }
     }
 
     if (fontWeight) {
-      layout.fontWeight((datum, index) => {
-        return typeof fontWeight === "function"
-          ? fontWeight(datum as ComputedWord, index)
-          : fontWeight;
-      });
+      if (typeof fontWeight === "function") {
+        layout.fontWeight((datum, index) => fontWeight(datum as ComputedWord, index));
+      } else {
+        layout.fontWeight(fontWeight);
+      }
     }
 
     if (fontSize) {
-      layout.fontSize((datum, index) => {
-        return typeof fontSize === "function" ? fontSize(datum as ComputedWord, index) : fontSize;
-      });
+      if (typeof fontSize === "function") {
+        layout.fontSize((datum, index) => fontSize(datum as ComputedWord, index));
+      } else {
+        layout.fontSize(fontSize);
+      }
     }
 
     if (rotate) {
-      layout.rotate((datum, index) => {
-        return rotate(datum as ComputedWord, index);
-      });
+      layout.rotate((datum, index) => rotate(datum as ComputedWord, index));
     }
 
     layout.on("end", (computedWords) => {

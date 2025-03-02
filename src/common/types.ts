@@ -14,7 +14,6 @@ export type ExtractValue<T> = T extends (...args: any[]) => infer R ? R : T;
 
 export type Accessor<Value> = (word: ComputedWord, wordIndex: number) => Value;
 export type ValueOrAccessor<Value> = Value | Accessor<Value>;
-export type SerializedAccessor = string;
 
 export type FontValue = ValueOrAccessor<Property.FontFamily>;
 export type FontStyleValue = ValueOrAccessor<Property.FontStyle>;

@@ -15,43 +15,13 @@ import {
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { CSSProperties, memo, ReactNode, useEffect, useRef, useState } from "react";
-import { useLoading } from "../../common/hooks";
+import { DefaultLoader } from "../DefaultLoader";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
 const defaultRotate: RotateValue = () => (~~(Math.random() * 6) - 3) * 30;
 const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
-
-const defaultLoader = (
-  <div
-    style={{
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      width: "100%",
-      height: "100%",
-    }}
-  >
-    <div
-      style={{
-        border: "4px solid rgba(200,200,200,0.8)",
-        borderTop: "4px solid #3498db",
-        borderRadius: "50%",
-        width: "40px",
-        height: "40px",
-        animation: "spin .6s linear infinite",
-      }}
-    />
-    <style>
-      {`
-        @keyframes spin {
-          0% { transform: rotate(0deg); }
-          100% { transform: rotate(360deg); }
-        }
-      `}
-    </style>
-  </div>
-);
+const defaultLoader = <DefaultLoader />;
 
 export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
@@ -84,7 +54,7 @@ const Cloud = ({
   loaderContainerStyle,
 }: WordCloudProps) => {
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
-  const { isLoading, loadingStateCache, setIsLoading } = useLoading();
+  const [isLoading, setIsLoading] = useState(false);
 
   const workerRef = useRef<WordCloudWorker | null>(null);
   const latestWorkerRequestId = useRef<number>(0);
@@ -110,13 +80,10 @@ const Cloud = ({
         workerRef.current = null;
       }
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [useWorker]);
 
   useEffect(() => {
-    if (loadingStateCache.current) return;
-
-    setIsLoading(true);
+    if (isLoading) return;
 
     const finalConfig: WordCloudConfig = {
       font,
@@ -133,6 +100,8 @@ const Cloud = ({
     };
 
     if (useWorker && workerRef.current) {
+      setIsLoading(true);
+
       // Increment the request ID for each new calculation
       const requestId = latestWorkerRequestId.current + 1;
       latestWorkerRequestId.current = requestId;
@@ -155,7 +124,9 @@ const Cloud = ({
 
       // Send a message to the worker
       workerRef.current.postMessage(workerMessage);
-    } else {
+    } else if (!useWorker) {
+      setIsLoading(true);
+
       // Run on the main thread
       computeWords(finalConfig)
         .then((computedWords) => setComputedWords(computedWords))
