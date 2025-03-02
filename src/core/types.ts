@@ -16,11 +16,11 @@ export type FontWeightValue = ValueOrAccessor<Property.FontWeight>;
 export type FontSizeValue = ValueOrAccessor<number>;
 export type RotateValue = ValueOrAccessor<number>;
 
-export type LayoutSize = [width: number, height: number];
+export type WordCloudSize = [width: number, height: number];
 export type SpiralValue =
   | "archimedean"
   | "rectangular"
-  | ((size: LayoutSize) => (currentStep: number) => [x: number, y: number]);
+  | ((size: WordCloudSize) => (currentStep: number) => [x: number, y: number]);
 export type PaddingValue = number | (() => number);
 export type RandomNumberGenerator = () => number;
 
@@ -39,18 +39,4 @@ export type WordCloudConfig = {
   fontWeight?: FontWeightValue;
   fontSize?: FontSizeValue;
   rotate?: RotateValue;
-};
-
-export type WorkerMessage = WordCloudConfig & {
-  requestId: number;
-};
-
-export type WorkerResponse = {
-  requestId: number;
-  computedWords: ComputedWord[];
-};
-
-export type WordCloudWorker = Worker & {
-  onmessage: (evt: MessageEvent<WorkerResponse>) => void;
-  postMessage: (this: Worker, message: MessageEvent<WorkerMessage>) => void;
 };
