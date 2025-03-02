@@ -1,7 +1,8 @@
 import { ComputedWord, computeWords, FillValue, WordCloudConfig } from "../../core";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
+import { useLoading } from "../../core/hooks";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 
@@ -9,7 +10,7 @@ export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
 };
 
-export const WordCloud = ({
+const Cloud = ({
   fill = (_, index) => defaultScaleOrdinal(String(index)),
   font = "Impact",
   fontStyle = "normal",
@@ -18,15 +19,21 @@ export const WordCloud = ({
   rotate = () => (~~(Math.random() * 6) - 3) * 30,
   spiral = "archimedean",
   padding = 1,
-  random = Math.random,
+  random = () => 1,
   width,
   height,
-  ...otherProps
+  timeInterval,
+  words,
 }: WordCloudProps) => {
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
+  const { loadingStateCache, setIsLoading } = useLoading();
 
   useEffect(() => {
-    const finalConfig = {
+    if (loadingStateCache.current) return;
+
+    setIsLoading(true);
+
+    const finalConfig: WordCloudConfig = {
       font,
       fontStyle,
       fontWeight,
@@ -37,22 +44,27 @@ export const WordCloud = ({
       random,
       width,
       height,
-      ...otherProps,
+      timeInterval,
+      words,
     };
 
-    computeWords(finalConfig).then((computedWords) => setComputedWords(computedWords));
+    computeWords(finalConfig)
+      .then((computedWords) => setComputedWords(computedWords))
+      .finally(() => setIsLoading(false));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
+    height,
+    padding,
+    width,
+    words,
+    timeInterval,
+    spiral,
     font,
-    fontSize,
     fontStyle,
     fontWeight,
-    height,
-    otherProps,
-    padding,
-    random,
-    rotate,
-    spiral,
-    width,
+    fontSize,
+    //rotate,
+    //random,
   ]);
 
   return (
@@ -78,3 +90,5 @@ export const WordCloud = ({
     </svg>
   );
 };
+
+export const WordCloud = memo(Cloud);

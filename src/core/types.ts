@@ -8,13 +8,14 @@ export type Word = {
 
 export type ComputedWord = Word & Required<cloud.Word>;
 
-export type ValueOrAccessor<Value> = Value | ((datum: ComputedWord, datumIndex: number) => Value);
+export type Accessor<Value> = (datum: ComputedWord, datumIndex: number) => Value;
+export type ValueOrAccessor<Value> = Value | Accessor<Value>;
 
 export type FontValue = ValueOrAccessor<Property.FontFamily>;
 export type FontStyleValue = ValueOrAccessor<Property.FontStyle>;
 export type FontWeightValue = ValueOrAccessor<Property.FontWeight>;
 export type FontSizeValue = ValueOrAccessor<number>;
-export type RotateValue = ValueOrAccessor<number>;
+export type RotateValue = Accessor<number>;
 
 export type WordCloudSize = [width: number, height: number];
 export type SpiralValue =

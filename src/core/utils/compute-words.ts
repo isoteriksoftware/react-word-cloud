@@ -66,7 +66,8 @@ export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> =
 
     if (rotate) {
       layout.rotate((datum, index) => {
-        return typeof rotate === "function" ? rotate(datum as ComputedWord, index) : rotate;
+        console.log(`Rotating word: ${datum.text}`);
+        return rotate(datum as ComputedWord, index);
       });
     }
 
