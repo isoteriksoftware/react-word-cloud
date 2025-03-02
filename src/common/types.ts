@@ -27,7 +27,7 @@ export type SpiralValue = "archimedean" | "rectangular";
 export type PaddingValue = ValueOrAccessor<number>;
 
 export type CustomTextProps = Accessor<
-  Omit<SVGProps<SVGTextElement>, "style"> & {
+  Omit<SVGProps<SVGTextElement>, "style" | "onClick" | "onMouseOver" | "onMouseOut"> & {
     style?: Omit<
       CSSProperties,
       "fontFamily" | "fontStyle" | "fontWeight" | "fontSize" | "fill" | "transition" | "transform"

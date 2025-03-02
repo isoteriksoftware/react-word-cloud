@@ -33,6 +33,9 @@ export type WordCloudProps = WordCloudConfig & {
   loaderContainerStyle?: CSSProperties;
   onLoadStart?: () => void;
   onLoadComplete?: () => void;
+  onWordClick?: (word: ComputedWord, index: number) => void;
+  onWordMouseOver?: (word: ComputedWord, index: number) => void;
+  onWordMouseOut?: (word: ComputedWord, index: number) => void;
 };
 
 const Cloud = ({
@@ -56,6 +59,9 @@ const Cloud = ({
   loaderContainerStyle,
   onLoadStart,
   onLoadComplete,
+  onWordClick,
+  onWordMouseOver,
+  onWordMouseOut,
 }: WordCloudProps) => {
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -188,6 +194,9 @@ const Cloud = ({
                 {...customProps}
                 transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate}) ${transform || ""}`}
                 style={mergedStyle}
+                onClick={() => onWordClick?.(word, index)}
+                onMouseOver={() => onWordMouseOver?.(word, index)}
+                onMouseOut={() => onWordMouseOut?.(word, index)}
               >
                 {word.text}
               </text>
