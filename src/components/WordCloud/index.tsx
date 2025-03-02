@@ -178,7 +178,7 @@ const Cloud = ({
   ]);
 
   return (
-    <div style={{ position: "relative", ...containerStyle }}>
+    <div style={{ position: "relative", width: "100%", height: "100%", ...containerStyle }}>
       <svg viewBox={`0 0 ${width} ${height}`}>
         <g transform={`translate(${width / 2},${height / 2})`}>
           {computedWords.map((word, index) => {
