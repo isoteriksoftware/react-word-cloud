@@ -1,23 +1,33 @@
-import { ComputedWord, computeWords, FillValue, WordCloudConfig } from "../../core";
+import {
+  ComputedWord,
+  computeWords,
+  FillValue,
+  FontSizeValue,
+  RandomNumberGenerator,
+  RotateValue,
+  WordCloudConfig,
+} from "../../core";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { memo, useEffect, useState } from "react";
 import { useLoading } from "../../core/hooks";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
-const defaultRandom = Math.random;
-const defaultRotate = () => (~~(Math.random() * 6) - 3) * 30;
+const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
+const defaultRandom: RandomNumberGenerator = Math.random;
+const defaultRotate: RotateValue = () => (~~(Math.random() * 6) - 3) * 30;
+const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
 
 export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
 };
 
 const Cloud = ({
-  fill = (_, index) => defaultScaleOrdinal(String(index)),
+  fill = defaultFill,
   font = "Impact",
   fontStyle = "normal",
   fontWeight = "normal",
-  fontSize = (datum) => Math.sqrt(datum.value),
+  fontSize = defaultFontSize,
   rotate = defaultRotate,
   spiral = "archimedean",
   padding = 1,
