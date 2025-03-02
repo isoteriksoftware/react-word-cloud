@@ -15,7 +15,7 @@ export default defineConfig((configEnv) => ({
       linters: [new EsLinter({ configEnv })],
     }),
     dts({
-      include: ["src/components", "src/core", "src/index.ts"],
+      include: ["src/components", "src/common", "src/index.ts"],
       tsconfigPath: "./tsconfig.app.json",
     }),
   ],

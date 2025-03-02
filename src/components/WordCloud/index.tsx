@@ -6,11 +6,11 @@ import {
   RandomNumberGenerator,
   RotateValue,
   WordCloudConfig,
-} from "../../core";
+} from "../../common";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { memo, useEffect, useState } from "react";
-import { useLoading } from "../../core/hooks";
+import { useLoading } from "../../common/hooks";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
