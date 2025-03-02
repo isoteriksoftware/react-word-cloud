@@ -154,13 +154,7 @@ const Cloud = ({
       };
 
       // Send a message to the worker
-      try {
-        console.log({ workerMessage });
-        workerRef.current.postMessage(workerMessage);
-      } catch (error) {
-        console.error("Failed to post message to worker", error);
-        setIsLoading(false);
-      }
+      workerRef.current.postMessage(workerMessage);
     } else {
       // Run on the main thread
       computeWords(finalConfig)
@@ -184,7 +178,7 @@ const Cloud = ({
   ]);
 
   return (
-    <div style={{ position: "relative", width, height, ...containerStyle }}>
+    <div style={{ position: "relative", ...containerStyle }}>
       <svg viewBox={`0 0 ${width} ${height}`}>
         <g transform={`translate(${width / 2},${height / 2})`}>
           {computedWords.map((word, index) => {
@@ -214,7 +208,7 @@ const Cloud = ({
         </g>
       </svg>
 
-      {isLoading && (
+      {isLoading && useWorker && (
         <div
           style={{
             position: "absolute",
@@ -226,7 +220,7 @@ const Cloud = ({
             alignItems: "center",
             justifyContent: "center",
             borderRadius: "4px",
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
+            backgroundColor: "rgba(0, 0, 0, 0.1)",
             ...loaderContainerStyle,
           }}
         >
