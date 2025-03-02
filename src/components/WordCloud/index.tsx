@@ -176,15 +176,17 @@ const Cloud = ({
               fill: typeof fill === "function" ? fill(word, index) : fill,
               transition: typeof transition === "function" ? transition(word, index) : transition,
             };
-            const customProps = customTextProps ? customTextProps(word, index) : {};
+            const { transform, ...customProps } = customTextProps
+              ? customTextProps(word, index)
+              : {};
             const mergedStyle = { ...defaultStyle, ...customProps.style };
 
             return (
               <text
                 key={index}
                 textAnchor="middle"
-                transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate})`}
                 {...customProps}
+                transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate}) ${transform || ""}`}
                 style={mergedStyle}
               >
                 {word.text}

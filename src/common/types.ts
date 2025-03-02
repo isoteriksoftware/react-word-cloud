@@ -1,6 +1,6 @@
 import { Property } from "csstype";
 import cloud from "d3-cloud";
-import { SVGProps } from "react";
+import { CSSProperties, SVGProps } from "react";
 
 export type Word = {
   text: string;
@@ -21,11 +21,19 @@ export type FontWeightValue = ValueOrAccessor<Property.FontWeight>;
 export type FontSizeValue = ValueOrAccessor<number>;
 export type TransitionValue = ValueOrAccessor<Property.Transition>;
 export type RotateValue = Accessor<number>;
-export type CustomTextProps = Accessor<SVGProps<SVGTextElement>>;
 export type FillValue = ValueOrAccessor<Property.Color>;
 
 export type SpiralValue = "archimedean" | "rectangular";
 export type PaddingValue = ValueOrAccessor<number>;
+
+export type CustomTextProps = Accessor<
+  Omit<SVGProps<SVGTextElement>, "style"> & {
+    style?: Omit<
+      CSSProperties,
+      "fontFamily" | "fontStyle" | "fontWeight" | "fontSize" | "fill" | "transition" | "transform"
+    >;
+  }
+>;
 
 export type WorkerResolvedValue<Accessor> =
   | ExtractValue<Accessor>
