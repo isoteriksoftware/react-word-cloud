@@ -1,5 +1,12 @@
-import { ComputedWord, computeWords, FillValue, WordCloudConfig } from "../../core";
-import WordCloudWorker from "../../core/workers/word-cloud-worker?worker";
+import {
+  ComputedWord,
+  computeWords,
+  FillValue,
+  WordCloudConfig,
+  WordCloudWorker,
+  WorkerResponse,
+} from "../../core";
+//import WordCloudWorker from "../../core/workers/word-cloud-worker.ts?worker";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { useEffect, useRef, useState } from "react";
@@ -25,16 +32,23 @@ export const WordCloud = ({ disableWorker, ...config }: WordCloudProps) => {
   } = config;
 
   const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
-  const workerRef = useRef<Worker | null>(null);
+  const workerRef = useRef<WordCloudWorker | null>(null);
+  const latestWorkerRequestId = useRef<number>(0);
 
   useEffect(() => {
     if (!disableWorker) {
       // Instantiate the worker
-      workerRef.current = new WordCloudWorker();
+      workerRef.current = new Worker(
+        new URL("../../core/workers/word-cloud-worker.ts?worker", import.meta.url),
+        { type: "module" },
+      ) as WordCloudWorker;
 
       // Listen for results
-      workerRef.current.onmessage = (evt: MessageEvent<ComputedWord[]>) => {
-        setComputedWords(evt.data);
+      workerRef.current!.onmessage = (evt: MessageEvent<WorkerResponse>) => {
+        // Only update state if this response matches the latest requestId
+        if (evt.data.requestId === latestWorkerRequestId.current) {
+          setComputedWords(evt.data.computedWords);
+        }
       };
     }
 
@@ -61,8 +75,12 @@ export const WordCloud = ({ disableWorker, ...config }: WordCloudProps) => {
     };
 
     if (!disableWorker && workerRef.current) {
+      // Increment the request ID for each new calculation
+      const requestId = latestWorkerRequestId.current + 1;
+      latestWorkerRequestId.current = requestId;
+
       // Send a message to the worker
-      workerRef.current.postMessage(finalConfig);
+      workerRef.current.postMessage({ requestId, ...finalConfig });
     } else {
       // Run on the main thread
       computeWords(finalConfig).then((computedWords) => setComputedWords(computedWords));

@@ -49,3 +49,8 @@ export type WorkerResponse = {
   requestId: number;
   computedWords: ComputedWord[];
 };
+
+export type WordCloudWorker = Worker & {
+  onmessage: (evt: MessageEvent<WorkerResponse>) => void;
+  postMessage: (this: Worker, message: MessageEvent<WorkerMessage>) => void;
+};

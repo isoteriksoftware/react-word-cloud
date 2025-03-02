@@ -16,6 +16,7 @@ export default defineConfig((configEnv) => ({
     }),
     dts({
       include: ["src/components", "src/core", "src/index.ts"],
+      tsconfigPath: "./tsconfig.app.json",
     }),
   ],
   build: {

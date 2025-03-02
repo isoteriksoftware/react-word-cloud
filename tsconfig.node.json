@@ -1,10 +1,12 @@
 {
   "compilerOptions": {
     "tsBuildInfoFile": "./node_modules/.tmp/tsconfig.node.tsbuildinfo",
-    "target": "ES2022",
-    "lib": ["ES2023"],
+    "target": "ESNext",
+    "lib": ["ESNext"],
     "module": "ESNext",
     "skipLibCheck": true,
+    "baseUrl": ".",
+    "outDir": "dist",
 
     /* Bundler mode */
     "moduleResolution": "Node",
@@ -12,14 +14,21 @@
     "isolatedModules": true,
     "moduleDetection": "force",
     "noEmit": true,
+    "jsx": "react-jsx",
     "resolveJsonModule": true,
+    "declaration": true,
+    "esModuleInterop": true,
+    "declarationMap": true,
+    "allowJs": false,
+    "typeRoots": ["node_modules/@types", "src/index.d.ts"],
 
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true,
-    "noUncheckedSideEffectImports": true
+    "noUncheckedSideEffectImports": true,
+    "allowSyntheticDefaultImports": true
   },
   "include": ["vite.config.ts", "package.json"]
 }
