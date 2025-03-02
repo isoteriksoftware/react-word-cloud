@@ -5,6 +5,8 @@ import { memo, useEffect, useState } from "react";
 import { useLoading } from "../../core/hooks";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
+const defaultRandom = Math.random;
+const defaultRotate = () => (~~(Math.random() * 6) - 3) * 30;
 
 export type WordCloudProps = WordCloudConfig & {
   fill?: FillValue;
@@ -16,10 +18,10 @@ const Cloud = ({
   fontStyle = "normal",
   fontWeight = "normal",
   fontSize = (datum) => Math.sqrt(datum.value),
-  rotate = () => (~~(Math.random() * 6) - 3) * 30,
+  rotate = defaultRotate,
   spiral = "archimedean",
   padding = 1,
-  random = () => 1,
+  random = defaultRandom,
   width,
   height,
   timeInterval,
@@ -63,8 +65,8 @@ const Cloud = ({
     fontStyle,
     fontWeight,
     fontSize,
-    //rotate,
-    //random,
+    rotate,
+    random,
   ]);
 
   return (
