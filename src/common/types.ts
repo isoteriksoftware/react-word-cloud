@@ -1,6 +1,6 @@
 import { Property } from "csstype";
 import cloud from "d3-cloud";
-import { CSSProperties, SVGProps } from "react";
+import { JSX } from "react";
 
 export type Word = {
   text: string;
@@ -23,15 +23,6 @@ export type FillValue = ValueOrAccessor<Property.Color>;
 export type SpiralValue = "archimedean" | "rectangular";
 export type PaddingValue = ValueOrAccessor<number>;
 
-export type CustomTextProps = Accessor<
-  Omit<SVGProps<SVGTextElement>, "style" | "onClick" | "onMouseOver" | "onMouseOut"> & {
-    style?: Omit<
-      CSSProperties,
-      "fontFamily" | "fontStyle" | "fontWeight" | "fontSize" | "fill" | "transition" | "transform"
-    >;
-  }
->;
-
 export type GradientStop = {
   offset: string;
   color: string;
@@ -43,6 +34,17 @@ export type Gradient = {
   stops: GradientStop[];
   angle?: number;
 };
+
+export type WordRendererData = ComputedWord & {
+  index: number;
+  fill: string;
+  transition: string;
+  onWordClick?: (word: ComputedWord, index: number) => void;
+  onWordMouseOver?: (word: ComputedWord, index: number) => void;
+  onWordMouseOut?: (word: ComputedWord, index: number) => void;
+};
+
+export type WordRenderer = (data: WordRendererData) => JSX.Element;
 
 export type WordCloudConfig = {
   words: Word[];

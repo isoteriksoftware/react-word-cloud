@@ -1,35 +1,37 @@
 import {
   ComputedWord,
   computeWords,
-  CustomTextProps,
   FillValue,
   FontSizeValue,
   Gradient,
   RotateValue,
   TransitionValue,
   WordCloudConfig,
+  WordRenderer,
+  WordRendererData,
 } from "../../common";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { memo, useEffect, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
+import { DefaultWordRenderer } from "../DefaultWordRenderer";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
 const defaultRotate: RotateValue = () => (~~(Math.random() * 6) - 3) * 30;
 const defaultFontSize: FontSizeValue = (word) => Math.sqrt(word.value);
+const defaultWordRenderer: WordRenderer = (data) => <DefaultWordRenderer data={data} />;
 
-export type WordCloudProps = WordCloudConfig & {
-  fill?: FillValue;
-  transition?: TransitionValue;
-  customTextProps?: CustomTextProps;
-  gradients?: Gradient[];
-  onLoadStart?: () => void;
-  onLoadComplete?: () => void;
-  onWordClick?: (word: ComputedWord, index: number) => void;
-  onWordMouseOver?: (word: ComputedWord, index: number) => void;
-  onWordMouseOut?: (word: ComputedWord, index: number) => void;
-};
+export type WordCloudProps = WordCloudConfig &
+  Pick<WordRendererData, "onWordClick" | "onWordMouseOver" | "onWordMouseOut"> & {
+    fill?: FillValue;
+    transition?: TransitionValue;
+    gradients?: Gradient[];
+    renderWord?: WordRenderer;
+    onStartCompute?: () => void;
+    onComputeWord?: (word: ComputedWord, index: number) => void;
+    onCompleteCompute?: (words: ComputedWord[]) => void;
+  };
 
 const Cloud = ({
   fill = defaultFill,
@@ -41,14 +43,15 @@ const Cloud = ({
   rotate = defaultRotate,
   spiral = "archimedean",
   padding = 1,
+  renderWord = defaultWordRenderer,
   width,
   height,
   timeInterval,
   words,
-  customTextProps,
   gradients,
-  onLoadStart,
-  onLoadComplete,
+  onStartCompute,
+  onComputeWord,
+  onCompleteCompute,
   onWordClick,
   onWordMouseOver,
   onWordMouseOut,
@@ -59,15 +62,19 @@ const Cloud = ({
 
   const computationId = useRef(0);
 
-  const handleLoadStart = () => {
+  const handleStartCompute = () => {
     setIsLoading(true);
     setComputedWords([]);
-    onLoadStart?.();
+    onStartCompute?.();
   };
 
-  const handleLoadComplete = () => {
+  const handleCompleteCompute = (words: ComputedWord[]) => {
     setIsLoading(false);
-    onLoadComplete?.();
+    onCompleteCompute?.(words);
+  };
+
+  const handleComputeWord = (word: ComputedWord, index: number) => {
+    onComputeWord?.(word, index);
   };
 
   useEffect(() => {
@@ -76,7 +83,7 @@ const Cloud = ({
     setPendingComputation(true);
     computationId.current += 1;
 
-    handleLoadStart();
+    handleStartCompute();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     height,
@@ -112,14 +119,15 @@ const Cloud = ({
 
       computeWords(finalConfig, (computedWord) => {
         if (currentComputation === computationId.current) {
+          handleComputeWord(computedWord, computedWords.length);
           setComputedWords((prevWords) => {
             return [...prevWords, computedWord];
           });
         }
-      }).then(() => {
+      }).then((words) => {
         if (currentComputation === computationId.current) {
           setPendingComputation(false);
-          handleLoadComplete();
+          handleCompleteCompute(words);
         }
       });
     }
@@ -127,36 +135,22 @@ const Cloud = ({
   }, [pendingComputation]);
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`}>
+    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
       <GradientDefs gradients={gradients} />
 
       <g transform={`translate(${width / 2},${height / 2})`}>
         {computedWords.map((word, index) => {
-          const defaultStyle = {
-            fontFamily: word.font,
-            fontStyle: word.style,
-            fontWeight: word.weight,
-            fontSize: word.size,
+          const data: WordRendererData = {
+            index,
+            onWordClick,
+            onWordMouseOver,
+            onWordMouseOut,
             fill: typeof fill === "function" ? fill(word, index) : fill,
             transition: typeof transition === "function" ? transition(word, index) : transition,
+            ...word,
           };
-          const { transform, ...customProps } = customTextProps ? customTextProps(word, index) : {};
-          const mergedStyle = { ...defaultStyle, ...customProps.style };
 
-          return (
-            <text
-              key={index}
-              textAnchor="middle"
-              {...customProps}
-              transform={`translate(${word.x}, ${word.y}) rotate(${word.rotate}) ${transform || ""}`}
-              style={mergedStyle}
-              onClick={() => onWordClick?.(word, index)}
-              onMouseOver={() => onWordMouseOver?.(word, index)}
-              onMouseOut={() => onWordMouseOut?.(word, index)}
-            >
-              {word.text}
-            </text>
-          );
+          return renderWord(data);
         })}
       </g>
     </svg>
