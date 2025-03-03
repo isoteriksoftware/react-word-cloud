@@ -1,6 +1,6 @@
 import { Property } from "csstype";
 import cloud from "d3-cloud";
-import { JSX } from "react";
+import { ReactNode } from "react";
 
 export type Word = {
   text: string;
@@ -44,7 +44,7 @@ export type WordRendererData = ComputedWord & {
   onWordMouseOut?: (word: ComputedWord, index: number) => void;
 };
 
-export type WordRenderer = (data: WordRendererData) => JSX.Element;
+export type WordRenderer = (data: WordRendererData) => ReactNode;
 
 export type WordCloudConfig = {
   words: Word[];

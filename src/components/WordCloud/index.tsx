@@ -12,7 +12,7 @@ import {
 } from "../../common";
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
-import { memo, useEffect, useRef, useState } from "react";
+import { Fragment, memo, useEffect, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import { DefaultWordRenderer } from "../DefaultWordRenderer";
 
@@ -150,7 +150,8 @@ const Cloud = ({
             ...word,
           };
 
-          return renderWord(data);
+          const renderedWord = renderWord(data);
+          return <Fragment key={index}>{renderedWord}</Fragment>;
         })}
       </g>
     </svg>
