@@ -1,7 +1,10 @@
 import { ComputedWord, WordCloudConfig, WorkerMessage } from "../types";
 import cloud from "d3-cloud";
 
-export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> => {
+export const computeWords = (
+  config: WordCloudConfig,
+  onComputeWord: (word: ComputedWord) => void,
+): Promise<ComputedWord[]> => {
   const {
     words,
     width,
@@ -72,6 +75,8 @@ export const computeWords = (config: WordCloudConfig): Promise<ComputedWord[]> =
     if (rotate) {
       layout.rotate((datum, index) => rotate(datum as ComputedWord, index));
     }
+
+    layout.on("word", onComputeWord);
 
     layout.on("end", (computedWords) => {
       resolve(computedWords as ComputedWord[]);

@@ -153,9 +153,10 @@ const Cloud = ({
       handleLoadStart();
 
       // Run on the main thread
-      computeWords(finalConfig)
-        .then((computedWords) => setComputedWords(computedWords))
-        .finally(() => handleLoadComplete());
+      setComputedWords([]);
+      computeWords(finalConfig, (computedWord) => {
+        setComputedWords((prevWords) => [...prevWords, computedWord]);
+      }).finally(() => handleLoadComplete());
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
