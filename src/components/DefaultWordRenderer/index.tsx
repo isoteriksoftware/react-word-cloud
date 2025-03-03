@@ -1,4 +1,4 @@
-import { WordRendererData } from "../../common";
+import { WordRendererData } from "../../core";
 import { memo } from "react";
 
 export type DefaultWordRendererProps = {

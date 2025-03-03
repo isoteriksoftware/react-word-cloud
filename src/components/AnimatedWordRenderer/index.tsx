@@ -1,4 +1,4 @@
-import { ValueOrAccessor, WordRendererData } from "../../common";
+import { ValueOrAccessor, WordRendererData } from "../../core";
 import { memo, useEffect, useState } from "react";
 
 export type AnimatedWordRendererProps = {

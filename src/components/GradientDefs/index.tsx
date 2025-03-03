@@ -1,4 +1,4 @@
-import { computeLinearGradientCoords, Gradient } from "../../common";
+import { computeLinearGradientCoords, Gradient } from "../../core";
 
 export type GradientDefsProps = {
   gradients?: Gradient[];
