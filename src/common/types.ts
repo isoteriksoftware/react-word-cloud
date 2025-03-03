@@ -9,9 +9,6 @@ export type Word = {
 
 export type ComputedWord = Word & Required<cloud.Word>;
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export type ExtractValue<T> = T extends (...args: any[]) => infer R ? R : T;
-
 export type Accessor<Value> = (word: ComputedWord, wordIndex: number) => Value;
 export type ValueOrAccessor<Value> = Value | Accessor<Value>;
 
@@ -47,11 +44,6 @@ export type Gradient = {
   angle?: number;
 };
 
-export type WorkerResolvedValue<Accessor> =
-  | ExtractValue<Accessor>
-  | ExtractValue<Accessor>[]
-  | undefined;
-
 export type WordCloudConfig = {
   words: Word[];
   width: number;
@@ -64,27 +56,4 @@ export type WordCloudConfig = {
   fontWeight?: FontWeightValue;
   fontSize?: FontSizeValue;
   rotate?: RotateValue;
-};
-
-export type WorkerMessage = Pick<
-  WordCloudConfig,
-  "words" | "width" | "height" | "timeInterval" | "spiral"
-> & {
-  requestId: number;
-  padding?: WorkerResolvedValue<PaddingValue>;
-  font?: WorkerResolvedValue<FontValue>;
-  fontStyle?: WorkerResolvedValue<FontStyleValue>;
-  fontWeight?: WorkerResolvedValue<FontWeightValue>;
-  fontSize?: WorkerResolvedValue<FontSizeValue>;
-  rotate?: WorkerResolvedValue<RotateValue>;
-};
-
-export type WorkerResponse = {
-  requestId: number;
-  computedWords: ComputedWord[];
-};
-
-export type WordCloudWorker = Worker & {
-  onmessage: (evt: MessageEvent<WorkerResponse>) => void;
-  postMessage: (this: Worker, message: MessageEvent<WorkerMessage>) => void;
 };
