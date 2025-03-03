@@ -4,6 +4,7 @@ import {
   CustomTextProps,
   FillValue,
   FontSizeValue,
+  Gradient,
   mapAccessorResults,
   RotateValue,
   TransitionValue,
@@ -16,6 +17,7 @@ import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
 import { CSSProperties, memo, ReactNode, useEffect, useRef, useState } from "react";
 import { DefaultLoader } from "../DefaultLoader";
+import { GradientDefs } from "../GradientDefs";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);
 const defaultFill: FillValue = (_, index) => defaultScaleOrdinal(String(index));
@@ -31,6 +33,7 @@ export type WordCloudProps = WordCloudConfig & {
   loader?: ReactNode;
   containerStyle?: CSSProperties;
   loaderContainerStyle?: CSSProperties;
+  gradients?: Gradient[];
   onLoadStart?: () => void;
   onLoadComplete?: () => void;
   onWordClick?: (word: ComputedWord, index: number) => void;
@@ -57,6 +60,7 @@ const Cloud = ({
   customTextProps,
   containerStyle,
   loaderContainerStyle,
+  gradients,
   onLoadStart,
   onLoadComplete,
   onWordClick,
@@ -172,6 +176,8 @@ const Cloud = ({
   return (
     <div style={{ position: "relative", width: "100%", height: "100%", ...containerStyle }}>
       <svg viewBox={`0 0 ${width} ${height}`}>
+        <GradientDefs gradients={gradients} />
+
         <g transform={`translate(${width / 2},${height / 2})`}>
           {computedWords.map((word, index) => {
             const defaultStyle = {

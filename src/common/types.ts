@@ -35,6 +35,18 @@ export type CustomTextProps = Accessor<
   }
 >;
 
+export type GradientStop = {
+  offset: string;
+  color: string;
+};
+
+export type Gradient = {
+  id: string;
+  type: "linear" | "radial";
+  stops: GradientStop[];
+  angle?: number;
+};
+
 export type WorkerResolvedValue<Accessor> =
   | ExtractValue<Accessor>
   | ExtractValue<Accessor>[]
