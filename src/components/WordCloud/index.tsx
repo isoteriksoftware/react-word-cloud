@@ -11,6 +11,7 @@ import {
 } from "../../core";
 import { Fragment, memo } from "react";
 import { GradientDefs } from "../GradientDefs";
+import isDeepEqual from "react-fast-compare";
 
 export type WordCloudProps = UseWordCloudArgs &
   Pick<WordRendererData, "onWordClick" | "onWordMouseOver" | "onWordMouseOut"> & {
@@ -58,4 +59,4 @@ const Cloud = ({
   );
 };
 
-export const WordCloud = memo(Cloud);
+export const WordCloud = memo(Cloud, isDeepEqual);

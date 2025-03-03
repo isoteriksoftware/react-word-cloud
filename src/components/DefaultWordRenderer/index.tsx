@@ -1,5 +1,6 @@
 import { WordRendererData } from "../../core";
 import { memo } from "react";
+import isDeepEqual from "react-fast-compare";
 
 export type DefaultWordRendererProps = {
   data: WordRendererData;
@@ -30,4 +31,4 @@ const WordRenderer = ({ data }: DefaultWordRendererProps) => {
   );
 };
 
-export const DefaultWordRenderer = memo(WordRenderer);
+export const DefaultWordRenderer = memo(WordRenderer, isDeepEqual);

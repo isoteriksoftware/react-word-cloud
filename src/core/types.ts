@@ -19,9 +19,8 @@ export type FontSizeValue = ValueOrAccessor<number>;
 export type TransitionValue = ValueOrAccessor<Property.Transition>;
 export type RotateValue = Accessor<number>;
 export type FillValue = ValueOrAccessor<Property.Color>;
-
-export type SpiralValue = "archimedean" | "rectangular";
 export type PaddingValue = ValueOrAccessor<number>;
+export type SpiralValue = "archimedean" | "rectangular";
 
 export type GradientStop = {
   offset: string;

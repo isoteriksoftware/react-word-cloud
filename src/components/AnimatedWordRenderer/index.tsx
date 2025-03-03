@@ -1,5 +1,6 @@
 import { ValueOrAccessor, WordRendererData } from "../../core";
 import { memo, useEffect, useState } from "react";
+import isDeepEqual from "react-fast-compare";
 
 export type AnimatedWordRendererProps = {
   data: WordRendererData;
@@ -50,4 +51,4 @@ const WordRenderer = ({
   );
 };
 
-export const AnimatedWordRenderer = memo(WordRenderer);
+export const AnimatedWordRenderer = memo(WordRenderer, isDeepEqual);
