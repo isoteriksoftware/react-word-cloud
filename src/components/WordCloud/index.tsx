@@ -1,17 +1,17 @@
 import {
+  ComputedWord,
   defaultFill,
+  defaultTooltipRenderer,
   defaultWordRenderer,
   FillValue,
   Gradient,
+  TooltipRenderer,
   TransitionValue,
-  WordRenderer,
-  WordRendererData,
   useWordCloud,
   UseWordCloudArgs,
-  TooltipRenderer,
-  ComputedWord,
   WordMouseEvent,
-  defaultTooltipRenderer,
+  WordRenderer,
+  WordRendererData,
 } from "../../core";
 import { CSSProperties, Fragment, memo, useCallback, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
@@ -29,6 +29,11 @@ export type WordCloudProps = UseWordCloudArgs &
     containerStyle?: CSSProperties;
   };
 
+type HoveredWordData = {
+  word?: ComputedWord;
+  event?: WordMouseEvent;
+};
+
 const Cloud = ({
   fill = defaultFill,
   transition = "all .5s ease",
@@ -45,13 +50,16 @@ const Cloud = ({
   ...useWordCloudArgs
 }: WordCloudProps) => {
   const { computedWords } = useWordCloud({ width, height, ...useWordCloudArgs });
-  const [hoveredWord, setHoveredWord] = useState<ComputedWord>();
+  const [hoveredWord, setHoveredWord] = useState<HoveredWordData>({});
 
   const svgRef = useRef<SVGSVGElement>(null);
 
   const handleWordMouseOver = useCallback(
     (word: ComputedWord, index: number, event: WordMouseEvent) => {
-      setHoveredWord(word);
+      setHoveredWord({
+        word,
+        event,
+      });
       onWordMouseOver?.(word, index, event);
     },
     [onWordMouseOver],
@@ -59,7 +67,10 @@ const Cloud = ({
 
   const handleWordMouseOut = useCallback(
     (word: ComputedWord, index: number, event: WordMouseEvent) => {
-      setHoveredWord(undefined);
+      setHoveredWord({
+        word: undefined,
+        event: undefined,
+      });
       onWordMouseOut?.(word, index, event);
     },
     [onWordMouseOut],
@@ -98,7 +109,7 @@ const Cloud = ({
       {enableTooltip &&
         tooltipRenderer &&
         tooltipRenderer({
-          word: hoveredWord,
+          ...hoveredWord,
           svgElement: svgRef.current || undefined,
           layoutWidth: width,
           layoutHeight: height,

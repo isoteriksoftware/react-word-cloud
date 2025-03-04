@@ -53,6 +53,7 @@ export type WordRendererData = ComputedWord & {
 export type TooltipRendererData = {
   word?: ComputedWord;
   svgElement?: SVGElement;
+  event?: WordMouseEvent;
   layoutWidth: number;
   layoutHeight: number;
 };
