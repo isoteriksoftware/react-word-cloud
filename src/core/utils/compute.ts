@@ -1,4 +1,4 @@
-import { ComputedWord, WordCloudConfig } from "../types";
+import { ComputedWord, Position, TooltipRendererData, WordCloudConfig } from "../types";
 import cloud from "d3-cloud";
 
 export const computeWords = (
@@ -86,4 +86,36 @@ export const computeWords = (
 
     layout.start();
   });
+};
+
+export const computeLinearGradientCoords = (angle: number) => {
+  const rad = (angle * Math.PI) / 180;
+  const x1 = ((Math.cos(rad + Math.PI) + 1) / 2) * 100;
+  const y1 = ((Math.sin(rad + Math.PI) + 1) / 2) * 100;
+  const x2 = ((Math.cos(rad) + 1) / 2) * 100;
+  const y2 = ((Math.sin(rad) + 1) / 2) * 100;
+  return { x1, y1, x2, y2 };
+};
+
+export const computeWordPosition = ({
+  word,
+  svgElement,
+  layoutWidth,
+  layoutHeight,
+}: TooltipRendererData): Position => {
+  if (!word || !svgElement) {
+    return { x: word?.x || 0, y: word?.y || 0 };
+  }
+
+  const { width: renderedWidth, height: renderedHeight } = svgElement.getBoundingClientRect();
+  const scaleX = renderedWidth / layoutWidth;
+  const scaleY = renderedHeight / layoutHeight;
+
+  const offsetX = layoutWidth / 2;
+  const offsetY = layoutHeight / 2;
+
+  return {
+    x: (offsetX + word.x) * scaleX,
+    y: (offsetY + word.y) * scaleY,
+  };
 };

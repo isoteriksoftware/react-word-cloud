@@ -13,7 +13,7 @@ import {
   WordMouseEvent,
   defaultTooltipRenderer,
 } from "../../core";
-import { CSSProperties, Fragment, memo, useCallback, useState } from "react";
+import { CSSProperties, Fragment, memo, useCallback, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
 
@@ -47,12 +47,22 @@ const Cloud = ({
   const { computedWords } = useWordCloud({ width, height, ...useWordCloudArgs });
   const [hoveredWord, setHoveredWord] = useState<ComputedWord>();
 
+  const svgRef = useRef<SVGSVGElement>(null);
+
   const handleWordMouseOver = useCallback(
     (word: ComputedWord, index: number, event: WordMouseEvent) => {
       setHoveredWord(word);
       onWordMouseOver?.(word, index, event);
     },
     [onWordMouseOver],
+  );
+
+  const handleWordMouseOut = useCallback(
+    (word: ComputedWord, index: number, event: WordMouseEvent) => {
+      setHoveredWord(undefined);
+      onWordMouseOut?.(word, index, event);
+    },
+    [onWordMouseOut],
   );
 
   return (
@@ -64,7 +74,7 @@ const Cloud = ({
         ...containerStyle,
       }}
     >
-      <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
+      <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
         <GradientDefs gradients={gradients} />
 
         <g transform={`translate(${width / 2},${height / 2})`}>
@@ -73,7 +83,7 @@ const Cloud = ({
               index,
               onWordClick,
               onWordMouseOver: handleWordMouseOver,
-              onWordMouseOut,
+              onWordMouseOut: handleWordMouseOut,
               fill: typeof fill === "function" ? fill(word, index) : fill,
               transition: typeof transition === "function" ? transition(word, index) : transition,
               ...word,
@@ -85,7 +95,14 @@ const Cloud = ({
         </g>
       </svg>
 
-      {enableTooltip && tooltipRenderer && tooltipRenderer(hoveredWord)}
+      {enableTooltip &&
+        tooltipRenderer &&
+        tooltipRenderer({
+          word: hoveredWord,
+          svgElement: svgRef.current || undefined,
+          layoutWidth: width,
+          layoutHeight: height,
+        })}
     </div>
   );
 };

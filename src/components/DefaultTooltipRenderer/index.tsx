@@ -1,14 +1,9 @@
-import { ComputedWord } from "../../core";
+import { ComputedWord, computeWordPosition, Position, TooltipRendererData } from "../../core";
 import { CSSProperties, memo, useEffect, useState } from "react";
 import isDeepEqual from "react-fast-compare";
 
-type Position = {
-  x: number;
-  y: number;
-};
-
 export type DefaultTooltipRendererProps = {
-  word?: ComputedWord;
+  data: TooltipRendererData;
   transitionDuration?: number;
   containerStyle?: CSSProperties;
   textStyle?: CSSProperties;
@@ -16,7 +11,7 @@ export type DefaultTooltipRendererProps = {
 };
 
 const TooltipRenderer = ({
-  word,
+  data,
   transitionDuration = 300,
   containerStyle,
   textStyle,
@@ -27,20 +22,22 @@ const TooltipRenderer = ({
     y: 0,
   });
   const [visible, setVisible] = useState(false);
+  const [currentWord, setCurrentWord] = useState<ComputedWord>();
 
   useEffect(() => {
-    if (word) {
-      setPosition({ x: word.x, y: word.y });
+    if (data.word) {
+      setCurrentWord(data.word);
+      setPosition(computeWordPosition(data));
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [word]);
+  }, [data, transitionDuration]);
 
   const mergedContainerStyle: CSSProperties = {
     position: "absolute",
-    left: `${position.x + 10}px`,
-    top: `${position.y + 10}px`,
+    left: `${position.x}px`,
+    top: `${position.y}px`,
     opacity: visible ? 1 : 0,
     transition: `all ${transitionDuration}ms ease`,
     pointerEvents: "none",
@@ -68,8 +65,8 @@ const TooltipRenderer = ({
 
   return (
     <div style={mergedContainerStyle}>
-      <span style={mergedTextStyle}>{word?.text}</span>
-      <span style={mergedValueStyle}>{word?.value}</span>
+      <span style={mergedTextStyle}>{currentWord?.text}</span>
+      <span style={mergedValueStyle}>{currentWord?.value}</span>
     </div>
   );
 };
