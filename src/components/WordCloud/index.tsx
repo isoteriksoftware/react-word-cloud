@@ -8,8 +8,12 @@ import {
   WordRendererData,
   useWordCloud,
   UseWordCloudArgs,
+  TooltipRenderer,
+  ComputedWord,
+  WordMouseEvent,
+  defaultTooltipRenderer,
 } from "../../core";
-import { Fragment, memo } from "react";
+import { CSSProperties, Fragment, memo, useCallback, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
 
@@ -19,43 +23,70 @@ export type WordCloudProps = UseWordCloudArgs &
     transition?: TransitionValue;
     gradients?: Gradient[];
     renderWord?: WordRenderer;
+    enableTooltip?: boolean;
+    tooltipRenderer?: TooltipRenderer;
+    onWordTooltip?: (word: ComputedWord) => void;
+    containerStyle?: CSSProperties;
   };
 
 const Cloud = ({
   fill = defaultFill,
   transition = "all .5s ease",
   renderWord = defaultWordRenderer,
+  tooltipRenderer = defaultTooltipRenderer,
   width,
   height,
   gradients,
   onWordClick,
   onWordMouseOver,
   onWordMouseOut,
+  enableTooltip,
+  containerStyle,
   ...useWordCloudArgs
 }: WordCloudProps) => {
   const { computedWords } = useWordCloud({ width, height, ...useWordCloudArgs });
+  const [hoveredWord, setHoveredWord] = useState<ComputedWord>();
+
+  const handleWordMouseOver = useCallback(
+    (word: ComputedWord, index: number, event: WordMouseEvent) => {
+      setHoveredWord(word);
+      onWordMouseOver?.(word, index, event);
+    },
+    [onWordMouseOver],
+  );
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
-      <GradientDefs gradients={gradients} />
+    <div
+      style={{
+        position: "relative",
+        width: "100%",
+        height: "100%",
+        ...containerStyle,
+      }}
+    >
+      <svg viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
+        <GradientDefs gradients={gradients} />
 
-      <g transform={`translate(${width / 2},${height / 2})`}>
-        {computedWords.map((word, index) => {
-          const data: WordRendererData = {
-            index,
-            onWordClick,
-            onWordMouseOver,
-            onWordMouseOut,
-            fill: typeof fill === "function" ? fill(word, index) : fill,
-            transition: typeof transition === "function" ? transition(word, index) : transition,
-            ...word,
-          };
+        <g transform={`translate(${width / 2},${height / 2})`}>
+          {computedWords.map((word, index) => {
+            const data: WordRendererData = {
+              index,
+              onWordClick,
+              onWordMouseOver: handleWordMouseOver,
+              onWordMouseOut,
+              fill: typeof fill === "function" ? fill(word, index) : fill,
+              transition: typeof transition === "function" ? transition(word, index) : transition,
+              ...word,
+            };
 
-          const renderedWord = renderWord(data);
-          return <Fragment key={index}>{renderedWord}</Fragment>;
-        })}
-      </g>
-    </svg>
+            const renderedWord = renderWord(data);
+            return <Fragment key={index}>{renderedWord}</Fragment>;
+          })}
+        </g>
+      </svg>
+
+      {enableTooltip && tooltipRenderer && tooltipRenderer(hoveredWord)}
+    </div>
   );
 };
 

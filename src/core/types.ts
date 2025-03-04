@@ -43,9 +43,11 @@ export type WordRendererData = ComputedWord & {
   onWordClick?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
   onWordMouseOver?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
   onWordMouseOut?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
+  onWorldTooltip?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
 };
 
 export type WordRenderer = (data: WordRendererData) => ReactNode;
+export type TooltipRenderer = (word?: ComputedWord) => ReactNode;
 
 export type WordCloudConfig = {
   words: Word[];

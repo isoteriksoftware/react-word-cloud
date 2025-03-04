@@ -18,7 +18,7 @@ export const useWordCloud = ({
   padding = 1,
   width,
   height,
-  timeInterval,
+  timeInterval = 1,
   words,
   onStartCompute,
   onComputeWord,
