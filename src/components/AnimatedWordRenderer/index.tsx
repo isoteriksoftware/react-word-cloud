@@ -42,9 +42,9 @@ const WordRenderer = ({
         transition: word.transition,
         opacity: visible ? 1 : 0,
       }}
-      onClick={() => onWordClick?.(word, index)}
-      onMouseOver={() => onWordMouseOver?.(word, index)}
-      onMouseOut={() => onWordMouseOut?.(word, index)}
+      onClick={(event) => onWordClick?.(word, index, event)}
+      onMouseOver={(event) => onWordMouseOver?.(word, index, event)}
+      onMouseOut={(event) => onWordMouseOut?.(word, index, event)}
     >
       {word.text}
     </text>

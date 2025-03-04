@@ -1,6 +1,6 @@
 import { Property } from "csstype";
 import cloud from "d3-cloud";
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 
 export type Word = {
   text: string;
@@ -34,13 +34,15 @@ export type Gradient = {
   angle?: number;
 };
 
+export type WordMouseEvent = React.MouseEvent<SVGTextElement, MouseEvent>;
+
 export type WordRendererData = ComputedWord & {
   index: number;
   fill: string;
   transition: string;
-  onWordClick?: (word: ComputedWord, index: number) => void;
-  onWordMouseOver?: (word: ComputedWord, index: number) => void;
-  onWordMouseOut?: (word: ComputedWord, index: number) => void;
+  onWordClick?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
+  onWordMouseOver?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
+  onWordMouseOut?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
 };
 
 export type WordRenderer = (data: WordRendererData) => ReactNode;

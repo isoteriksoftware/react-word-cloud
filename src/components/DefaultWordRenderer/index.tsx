@@ -22,9 +22,9 @@ const WordRenderer = ({ data }: DefaultWordRendererProps) => {
         fill: word.fill,
         transition: word.transition,
       }}
-      onClick={() => onWordClick?.(word, index)}
-      onMouseOver={() => onWordMouseOver?.(word, index)}
-      onMouseOut={() => onWordMouseOut?.(word, index)}
+      onClick={(event) => onWordClick?.(word, index, event)}
+      onMouseOver={(event) => onWordMouseOver?.(word, index, event)}
+      onMouseOut={(event) => onWordMouseOut?.(word, index, event)}
     >
       {word.text}
     </text>
