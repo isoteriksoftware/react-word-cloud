@@ -57,7 +57,7 @@ describe("DefaultWordRenderer", () => {
   });
 
   it("re-renders with updated data", () => {
-    const { rerender } = render(<DefaultWordRenderer data={mockData} />);
+    const { rerender } = renderWord(mockData);
 
     const updatedWord: ComputedWord = {
       ...mockWord,
@@ -78,7 +78,11 @@ describe("DefaultWordRenderer", () => {
       onWordMouseOut: vi.fn(),
     };
 
-    rerender(<DefaultWordRenderer data={updatedData} />);
+    rerender(
+      <svg>
+        <DefaultWordRenderer data={updatedData} />
+      </svg>,
+    );
 
     const textElement = screen.getByTestId(textTestId);
     expect(textElement).toHaveTextContent("Updated Word");
