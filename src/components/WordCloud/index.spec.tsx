@@ -1,4 +1,4 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, act, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { WordCloud, WordCloudProps } from "./index";
 import { generateTestId } from "../../core/utils/test";
@@ -32,17 +32,19 @@ describe("WordCloud", () => {
     expect(container).toHaveStyle({ background: "#ff0000" });
   });
 
-  it("calls onWordClick when a word is clicked", () => {
+  it("calls onWordClick when a word is clicked", async () => {
     const onWordClick = vi.fn();
     render(<WordCloud {...defaultProps} onWordClick={onWordClick} />);
 
     const firstWord = screen.getByTestId(textTestId);
-    fireEvent.click(firstWord);
+    await act(async () => {
+      fireEvent.click(firstWord);
+    });
 
     expect(onWordClick).toHaveBeenCalled();
   });
 
-  it("handles mouse over and out events", () => {
+  it("handles mouse over and out events", async () => {
     const onWordMouseOver = vi.fn();
     const onWordMouseOut = vi.fn();
 
@@ -55,14 +57,18 @@ describe("WordCloud", () => {
     );
 
     const firstWord = screen.getByTestId(textTestId);
-    fireEvent.mouseOver(firstWord);
+    await act(async () => {
+      fireEvent.mouseOver(firstWord);
+    });
     expect(onWordMouseOver).toHaveBeenCalled();
 
-    fireEvent.mouseOut(firstWord);
+    await act(async () => {
+      fireEvent.mouseOut(firstWord);
+    });
     expect(onWordMouseOut).toHaveBeenCalled();
   });
 
-  it("renders tooltip when enableTooltip is true", () => {
+  it("renders tooltip when enableTooltip is true", async () => {
     const customTooltipRenderer: WordCloudProps["tooltipRenderer"] = ({ word }) => {
       return word ? <div data-testid="custom-tooltip">{word.text}</div> : null;
     };
@@ -72,7 +78,9 @@ describe("WordCloud", () => {
     );
 
     const firstWord = screen.getByTestId(textTestId);
-    fireEvent.mouseOver(firstWord);
+    await act(async () => {
+      fireEvent.mouseOver(firstWord);
+    });
 
     expect(screen.getByTestId("custom-tooltip")).toBeInTheDocument();
   });
@@ -86,12 +94,14 @@ describe("WordCloud", () => {
     expect(firstWord).toHaveStyle({ fill: "#ff0000" });
   });
 
-  it("applies custom transition", () => {
+  it("applies custom transition", async () => {
     const customTransition = "all 1s ease-in-out";
 
     render(<WordCloud {...defaultProps} transition={customTransition} />);
 
-    const firstWord = screen.getByTestId(textTestId);
-    expect(firstWord).toHaveStyle({ transition: "all 1s ease-in-out" });
+    await waitFor(() => {
+      const firstWord = screen.getByTestId(textTestId);
+      expect(firstWord).toHaveStyle({ transition: "all 1s ease-in-out" });
+    });
   });
 });
