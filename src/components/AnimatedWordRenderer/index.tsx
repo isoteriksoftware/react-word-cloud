@@ -1,11 +1,12 @@
 import { ValueOrAccessor, WordRendererData } from "../../core";
-import { memo, useEffect, useState } from "react";
+import { CSSProperties, memo, useEffect, useState } from "react";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
 
 export type AnimatedWordRendererProps = {
   data: WordRendererData;
   animationDelay?: ValueOrAccessor<number>;
+  textStyle?: CSSProperties;
 };
 
 const testId = generateTestId("AnimatedWordRenderer", "text");
@@ -14,6 +15,7 @@ const defaultAnimationDelay: AnimatedWordRendererProps["animationDelay"] = (_, i
 const WordRenderer = ({
   data,
   animationDelay = defaultAnimationDelay,
+  textStyle,
 }: AnimatedWordRendererProps) => {
   const { index, fill, transition, onWordClick, onWordMouseOver, onWordMouseOut, ...word } = data;
 
@@ -44,6 +46,8 @@ const WordRenderer = ({
         fill: fill,
         transition: transition,
         opacity: visible ? 1 : 0,
+        cursor: onWordClick ? "pointer" : "text",
+        ...textStyle,
       }}
       onClick={(event) => onWordClick?.(word, index, event)}
       onMouseOver={(event) => onWordMouseOver?.(word, index, event)}
