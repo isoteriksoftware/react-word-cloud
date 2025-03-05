@@ -3,35 +3,6 @@ import { describe, it, expect, vi } from "vitest";
 import { WordCloud, WordCloudProps } from "./index";
 import { generateTestId } from "../../core/utils/test";
 
-// vi.mock("../../utils", () => ({
-//   computeWords: vi.fn(() =>
-//     Promise.resolve([
-//       {
-//         text: "test",
-//         value: 10,
-//         x: 0,
-//         y: 0,
-//         rotate: 0,
-//         font: "Impact",
-//         style: "normal",
-//         weight: "normal",
-//         size: 20,
-//       },
-//       {
-//         text: "cloud",
-//         value: 20,
-//         x: 100,
-//         y: 100,
-//         rotate: 0,
-//         font: "Impact",
-//         style: "normal",
-//         weight: "normal",
-//         size: 20,
-//       },
-//     ]),
-//   ),
-// }));
-
 describe("WordCloud", () => {
   const containerTestId = generateTestId("WordCloud", "container");
   const svgTestId = generateTestId("WordCloud", "svg");
