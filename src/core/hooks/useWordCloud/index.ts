@@ -3,9 +3,9 @@ import { useEffect, useRef, useState } from "react";
 import { computeWords, defaultFontSize, defaultRotate } from "../../utils";
 
 export type UseWordCloudArgs = WordCloudConfig & {
-  onStartCompute?: () => void;
-  onComputeWord?: (word: ComputedWordData, index: number) => void;
-  onCompleteCompute?: (words: ComputedWordData[]) => void;
+  onStartComputation?: () => void;
+  onWordComputed?: (word: ComputedWordData, index: number) => void;
+  onCompleteComputation?: (words: ComputedWordData[]) => void;
 };
 
 export const useWordCloud = ({
@@ -20,29 +20,31 @@ export const useWordCloud = ({
   height,
   timeInterval = 1,
   words,
-  onStartCompute,
-  onComputeWord,
-  onCompleteCompute,
+  onStartComputation,
+  onWordComputed,
+  onCompleteComputation,
 }: UseWordCloudArgs) => {
   const [computedWords, setComputedWords] = useState<ComputedWordData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pendingComputation, setPendingComputation] = useState(false);
 
   const computationId = useRef(0);
+  const lastProcessedWordIndex = useRef(0);
 
   const handleStartCompute = () => {
+    lastProcessedWordIndex.current = 0;
     setIsLoading(true);
     setComputedWords([]);
-    onStartCompute?.();
+    onStartComputation?.();
   };
 
   const handleCompleteCompute = (words: ComputedWordData[]) => {
     setIsLoading(false);
-    onCompleteCompute?.(words);
+    onCompleteComputation?.(words);
   };
 
   const handleComputeWord = (word: ComputedWordData, index: number) => {
-    onComputeWord?.(word, index);
+    onWordComputed?.(word, index);
   };
 
   useEffect(() => {
@@ -83,17 +85,19 @@ export const useWordCloud = ({
         words,
       };
 
-      const currentComputation = computationId.current;
+      const currentComputationId = computationId.current;
 
       computeWords(finalConfig, (computedWord) => {
-        if (currentComputation === computationId.current) {
-          handleComputeWord(computedWord, computedWords.length);
+        if (currentComputationId === computationId.current) {
+          handleComputeWord(computedWord, lastProcessedWordIndex.current);
+          lastProcessedWordIndex.current += 1;
+
           setComputedWords((prevWords) => {
             return [...prevWords, computedWord];
           });
         }
       }).then((words) => {
-        if (currentComputation === computationId.current) {
+        if (currentComputationId === computationId.current) {
           setPendingComputation(false);
           handleCompleteCompute(words);
         }
