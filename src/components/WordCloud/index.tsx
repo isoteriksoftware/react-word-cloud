@@ -1,9 +1,10 @@
 import {
-  ComputedWord,
+  ComputedWordData,
   defaultFill,
   defaultTooltipRenderer,
   defaultWordRenderer,
   FillValue,
+  FinalWordData,
   Gradient,
   TooltipRenderer,
   TransitionValue,
@@ -26,12 +27,12 @@ export type WordCloudProps = UseWordCloudArgs &
     renderWord?: WordRenderer;
     enableTooltip?: boolean;
     renderTooltip?: TooltipRenderer;
-    onWordTooltip?: (word: ComputedWord) => void;
+    onWordTooltip?: (word: ComputedWordData) => void;
     containerStyle?: CSSProperties;
   };
 
 type HoveredWordData = {
-  word?: ComputedWord;
+  word?: FinalWordData;
   event?: WordMouseEvent;
 };
 
@@ -59,7 +60,7 @@ const Cloud = ({
   const svgRef = useRef<SVGSVGElement>(null);
 
   const handleWordMouseOver = useCallback(
-    (word: ComputedWord, index: number, event: WordMouseEvent) => {
+    (word: FinalWordData, index: number, event: WordMouseEvent) => {
       setHoveredWord({
         word,
         event,
@@ -70,7 +71,7 @@ const Cloud = ({
   );
 
   const handleWordMouseOut = useCallback(
-    (word: ComputedWord, index: number, event: WordMouseEvent) => {
+    (word: FinalWordData, index: number, event: WordMouseEvent) => {
       setHoveredWord({
         word: undefined,
         event: undefined,

@@ -2,7 +2,7 @@ import { renderHook, act } from "@testing-library/react";
 import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { useWordCloud } from "./index";
 import { computeWords } from "../../utils";
-import { ComputedWord, Word, WordCloudConfig } from "../../types";
+import { ComputedWordData, Word, WordCloudConfig } from "../../types";
 
 vi.mock("../../utils", () => ({
   computeWords: vi.fn(() => Promise.resolve([])),
@@ -68,7 +68,7 @@ describe("useWordCloud", () => {
     const onComputeWord = vi.fn();
     const onCompleteCompute = vi.fn();
 
-    const mockComputedWords: ComputedWord[] = [
+    const mockComputedWords: ComputedWordData[] = [
       {
         text: "hello",
         value: 10,
@@ -97,7 +97,7 @@ describe("useWordCloud", () => {
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     (computeWords as any).mockImplementation(
-      (_: WordCloudConfig, onWordCallback: (word: ComputedWord) => void) => {
+      (_: WordCloudConfig, onWordCallback: (word: ComputedWordData) => void) => {
         mockComputedWords.forEach((word) => onWordCallback(word));
         return Promise.resolve(mockComputedWords);
       },

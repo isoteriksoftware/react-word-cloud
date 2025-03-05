@@ -11,8 +11,11 @@ export type Word = {
   text: string;
   value: number;
 };
-
-export type ComputedWord = Word & Required<cloud.Word>;
+export type ComputedWordData = Word & Required<cloud.Word>;
+export type FinalWordData = ComputedWordData & {
+  fill: string;
+  transition: string;
+};
 
 export type Accessor<Value> = (word: Word, wordIndex: number) => Value;
 export type ValueOrAccessor<Value> = Value | Accessor<Value>;
@@ -41,17 +44,15 @@ export type Gradient = {
 
 export type WordMouseEvent = React.MouseEvent<SVGTextElement, MouseEvent>;
 
-export type WordRendererData = ComputedWord & {
+export type WordRendererData = FinalWordData & {
   index: number;
-  fill: string;
-  transition: string;
-  onWordClick?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
-  onWordMouseOver?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
-  onWordMouseOut?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
-  onWorldTooltip?: (word: ComputedWord, index: number, event: WordMouseEvent) => void;
+  onWordClick?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
+  onWordMouseOver?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
+  onWordMouseOut?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
+  onWorldTooltip?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
 };
 export type TooltipRendererData = {
-  word?: ComputedWord;
+  word?: FinalWordData;
   svgElement?: SVGElement;
   event?: WordMouseEvent;
   layoutWidth: number;

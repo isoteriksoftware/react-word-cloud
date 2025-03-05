@@ -1,7 +1,7 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { render, screen } from "@testing-library/react";
 import { DefaultTooltipRenderer, DefaultTooltipRendererProps } from "./index";
-import { ComputedWord, TooltipRendererData } from "../../core";
+import { FinalWordData, TooltipRendererData } from "../../core";
 import { generateTestId } from "../../core/utils/test";
 import "@testing-library/jest-dom";
 
@@ -10,7 +10,7 @@ describe("DefaultTooltipRenderer", () => {
   const textTestId = generateTestId("DefaultTooltipRenderer", "text");
   const valueTestId = generateTestId("DefaultTooltipRenderer", "value");
 
-  const mockWord: ComputedWord = {
+  const mockWord: FinalWordData = {
     text: "Test Word",
     value: 10,
     x: 100,
@@ -21,6 +21,8 @@ describe("DefaultTooltipRenderer", () => {
     weight: "normal",
     style: "normal",
     padding: 1,
+    transition: "all 0.3s ease",
+    fill: "#000000",
   };
 
   const mockData: TooltipRendererData = {

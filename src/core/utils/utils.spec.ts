@@ -1,6 +1,6 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 import { computeLinearGradientCoords, computeWordPosition } from "./compute";
-import { ComputedWord, Position } from "../types";
+import { FinalWordData, Position } from "../types";
 
 describe("computeLinearGradientCoords", () => {
   it("should compute correct coordinates for 0°", () => {
@@ -50,7 +50,7 @@ describe("computeLinearGradientCoords", () => {
 });
 
 describe("computeWordPosition", () => {
-  const mockWord: ComputedWord = {
+  const mockWord: FinalWordData = {
     text: "Test Word",
     value: 10,
     x: 10,
@@ -61,6 +61,8 @@ describe("computeWordPosition", () => {
     weight: "normal",
     style: "normal",
     padding: 1,
+    transition: "all 0.3s ease",
+    fill: "#000000",
   };
 
   const createMockSvgElement = (renderedWidth: number, renderedHeight: number): SVGElement => {

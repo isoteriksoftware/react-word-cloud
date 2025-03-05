@@ -1,11 +1,11 @@
-import { ComputedWord, WordCloudConfig } from "../../types";
+import { ComputedWordData, WordCloudConfig } from "../../types";
 import { useEffect, useRef, useState } from "react";
 import { computeWords, defaultFontSize, defaultRotate } from "../../utils";
 
 export type UseWordCloudArgs = WordCloudConfig & {
   onStartCompute?: () => void;
-  onComputeWord?: (word: ComputedWord, index: number) => void;
-  onCompleteCompute?: (words: ComputedWord[]) => void;
+  onComputeWord?: (word: ComputedWordData, index: number) => void;
+  onCompleteCompute?: (words: ComputedWordData[]) => void;
 };
 
 export const useWordCloud = ({
@@ -24,7 +24,7 @@ export const useWordCloud = ({
   onComputeWord,
   onCompleteCompute,
 }: UseWordCloudArgs) => {
-  const [computedWords, setComputedWords] = useState<ComputedWord[]>([]);
+  const [computedWords, setComputedWords] = useState<ComputedWordData[]>([]);
   const [isLoading, setIsLoading] = useState(false);
   const [pendingComputation, setPendingComputation] = useState(false);
 
@@ -36,12 +36,12 @@ export const useWordCloud = ({
     onStartCompute?.();
   };
 
-  const handleCompleteCompute = (words: ComputedWord[]) => {
+  const handleCompleteCompute = (words: ComputedWordData[]) => {
     setIsLoading(false);
     onCompleteCompute?.(words);
   };
 
-  const handleComputeWord = (word: ComputedWord, index: number) => {
+  const handleComputeWord = (word: ComputedWordData, index: number) => {
     onComputeWord?.(word, index);
   };
 

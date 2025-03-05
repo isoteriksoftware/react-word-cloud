@@ -1,4 +1,4 @@
-import { ComputedWord, computeWordPosition, Position, TooltipRendererData } from "../../core";
+import { computeWordPosition, FinalWordData, Position, TooltipRendererData } from "../../core";
 import { CSSProperties, memo, useEffect, useState } from "react";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
@@ -27,7 +27,7 @@ const TooltipRenderer = ({
     y: 0,
   });
   const [visible, setVisible] = useState(false);
-  const [currentWord, setCurrentWord] = useState<ComputedWord>();
+  const [currentWord, setCurrentWord] = useState<FinalWordData>();
 
   useEffect(() => {
     if (data.word) {

@@ -1,10 +1,10 @@
-import { ComputedWord, Position, TooltipRendererData, WordCloudConfig } from "../types";
+import { ComputedWordData, Position, TooltipRendererData, WordCloudConfig } from "../types";
 import cloud from "d3-cloud";
 
 export const computeWords = (
   config: WordCloudConfig,
-  onComputeWord: (word: ComputedWord) => void,
-): Promise<ComputedWord[]> => {
+  onComputeWord: (word: ComputedWordData) => void,
+): Promise<ComputedWordData[]> => {
   const {
     words,
     width,
@@ -34,7 +34,7 @@ export const computeWords = (
 
     if (padding) {
       if (typeof padding === "function") {
-        layout.padding((datum, index) => padding(datum as ComputedWord, index));
+        layout.padding((datum, index) => padding(datum as ComputedWordData, index));
       } else {
         layout.padding(padding);
       }
@@ -42,7 +42,7 @@ export const computeWords = (
 
     if (font) {
       if (typeof font === "function") {
-        layout.font((datum, index) => font(datum as ComputedWord, index));
+        layout.font((datum, index) => font(datum as ComputedWordData, index));
       } else {
         layout.font(font);
       }
@@ -50,7 +50,7 @@ export const computeWords = (
 
     if (fontStyle) {
       if (typeof fontStyle === "function") {
-        layout.fontStyle((datum, index) => fontStyle(datum as ComputedWord, index));
+        layout.fontStyle((datum, index) => fontStyle(datum as ComputedWordData, index));
       } else {
         layout.fontStyle(fontStyle);
       }
@@ -58,7 +58,7 @@ export const computeWords = (
 
     if (fontWeight) {
       if (typeof fontWeight === "function") {
-        layout.fontWeight((datum, index) => fontWeight(datum as ComputedWord, index));
+        layout.fontWeight((datum, index) => fontWeight(datum as ComputedWordData, index));
       } else {
         layout.fontWeight(fontWeight);
       }
@@ -66,22 +66,22 @@ export const computeWords = (
 
     if (fontSize) {
       if (typeof fontSize === "function") {
-        layout.fontSize((datum, index) => fontSize(datum as ComputedWord, index));
+        layout.fontSize((datum, index) => fontSize(datum as ComputedWordData, index));
       } else {
         layout.fontSize(fontSize);
       }
     }
 
     if (rotate) {
-      layout.rotate((datum, index) => rotate(datum as ComputedWord, index));
+      layout.rotate((datum, index) => rotate(datum as ComputedWordData, index));
     }
 
     layout.on("word", (word) => {
-      onComputeWord(word as ComputedWord);
+      onComputeWord(word as ComputedWordData);
     });
 
     layout.on("end", (computedWords) => {
-      resolve(computedWords as ComputedWord[]);
+      resolve(computedWords as ComputedWordData[]);
     });
 
     layout.start();

@@ -3,12 +3,12 @@ import { render, screen, fireEvent } from "@testing-library/react";
 import { DefaultWordRenderer } from "./index";
 import "@testing-library/jest-dom";
 import { generateTestId } from "../../core/utils/test";
-import { ComputedWord, WordRendererData } from "../../core";
+import { ComputedWordData, WordRendererData } from "../../core";
 
 describe("DefaultWordRenderer", () => {
   const textTestId = generateTestId("DefaultWordRenderer", "text");
 
-  const mockWord: ComputedWord = {
+  const mockWord: ComputedWordData = {
     text: "Test Word",
     value: 10,
     x: 100,
@@ -59,7 +59,7 @@ describe("DefaultWordRenderer", () => {
   it("re-renders with updated data", () => {
     const { rerender } = renderWord(mockData);
 
-    const updatedWord: ComputedWord = {
+    const updatedWord: ComputedWordData = {
       ...mockWord,
       text: "Updated Word",
       value: 20,

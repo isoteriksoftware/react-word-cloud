@@ -17,7 +17,7 @@ const WordRenderer = ({
   animationDelay = defaultAnimationDelay,
   textStyle,
 }: AnimatedWordRendererProps) => {
-  const { index, fill, transition, onWordClick, onWordMouseOver, onWordMouseOut, ...word } = data;
+  const { index, onWordClick, onWordMouseOver, onWordMouseOut, ...word } = data;
 
   const [visible, setVisible] = useState(false);
 
@@ -43,8 +43,8 @@ const WordRenderer = ({
         fontStyle: word.style,
         fontWeight: word.weight,
         fontSize: `${word.size}px`,
-        fill: fill,
-        transition: transition,
+        fill: word.fill,
+        transition: word.transition,
         opacity: visible ? 1 : 0,
         cursor: onWordClick ? "pointer" : "text",
         ...textStyle,

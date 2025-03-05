@@ -2,12 +2,12 @@ import { describe, it, expect, vi, beforeEach, afterEach } from "vitest";
 import { render, screen, act } from "@testing-library/react";
 import { AnimatedWordRenderer, AnimatedWordRendererProps } from "./index";
 import { generateTestId } from "../../core/utils/test";
-import { ComputedWord, WordRendererData } from "../../core";
+import { ComputedWordData, WordRendererData } from "../../core";
 
 describe("AnimatedWordRenderer", () => {
   const testId = generateTestId("AnimatedWordRenderer", "text");
 
-  const mockWord: ComputedWord = {
+  const mockWord: ComputedWordData = {
     text: "Test Word",
     value: 10,
     x: 100,

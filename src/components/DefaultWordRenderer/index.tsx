@@ -11,7 +11,7 @@ export type DefaultWordRendererProps = {
 const testId = generateTestId("DefaultWordRenderer", "text");
 
 const WordRenderer = ({ data, textStyle }: DefaultWordRendererProps) => {
-  const { index, fill, transition, onWordClick, onWordMouseOver, onWordMouseOut, ...word } = data;
+  const { index, onWordClick, onWordMouseOver, onWordMouseOut, ...word } = data;
 
   return (
     <text
@@ -24,8 +24,8 @@ const WordRenderer = ({ data, textStyle }: DefaultWordRendererProps) => {
         fontStyle: word.style,
         fontWeight: word.weight,
         fontSize: `${word.size}px`,
-        fill: fill,
-        transition: transition,
+        fill: word.fill,
+        transition: word.transition,
         cursor: onWordClick ? "pointer" : "text",
         ...textStyle,
       }}
