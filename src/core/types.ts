@@ -14,7 +14,7 @@ export type Word = {
 
 export type ComputedWord = Word & Required<cloud.Word>;
 
-export type Accessor<Value> = (word: ComputedWord, wordIndex: number) => Value;
+export type Accessor<Value> = (word: Word, wordIndex: number) => Value;
 export type ValueOrAccessor<Value> = Value | Accessor<Value>;
 
 export type FontValue = ValueOrAccessor<Property.FontFamily>;
