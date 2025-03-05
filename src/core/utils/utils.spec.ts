@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { computeLinearGradientCoords, computeWordPosition } from "./compute";
+import { computeLinearGradientCoords, computeWordScreenPosition } from "./compute";
 import { FinalWordData, Position } from "../types";
 
 describe("computeLinearGradientCoords", () => {
@@ -49,7 +49,7 @@ describe("computeLinearGradientCoords", () => {
   });
 });
 
-describe("computeWordPosition", () => {
+describe("computeWordScreenPosition", () => {
   const mockWord: FinalWordData = {
     text: "Test Word",
     value: 10,
@@ -75,7 +75,7 @@ describe("computeWordPosition", () => {
   };
 
   it("returns fallback values when no word is provided", () => {
-    const result: Position = computeWordPosition({
+    const result: Position = computeWordScreenPosition({
       word: undefined,
       svgElement: createMockSvgElement(800, 800),
       layoutWidth: 400,
@@ -87,7 +87,7 @@ describe("computeWordPosition", () => {
   });
 
   it("returns fallback values when no svgElement is provided", () => {
-    const result: Position = computeWordPosition({
+    const result: Position = computeWordScreenPosition({
       word: mockWord,
       svgElement: undefined,
       layoutWidth: 400,
@@ -109,7 +109,7 @@ describe("computeWordPosition", () => {
     const layoutHeight = 400;
     const svgElement = createMockSvgElement(800, 800);
 
-    const result: Position = computeWordPosition({
+    const result: Position = computeWordScreenPosition({
       word,
       svgElement,
       layoutWidth,
@@ -129,7 +129,7 @@ describe("computeWordPosition", () => {
     const layoutWidth = 400;
     const layoutHeight = 400;
     const svgElement = createMockSvgElement(600, 600);
-    const result: Position = computeWordPosition({
+    const result: Position = computeWordScreenPosition({
       word,
       svgElement,
       layoutWidth,

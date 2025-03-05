@@ -97,7 +97,7 @@ export const computeLinearGradientCoords = (angle: number) => {
   return { x1, y1, x2, y2 };
 };
 
-export const computeWordPosition = ({
+export const computeWordScreenPosition = ({
   word,
   svgElement,
   layoutWidth,
