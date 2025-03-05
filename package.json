@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "author": "Imran Abdumalik <imranabdulmalik01@gmail.com>",
-  "description": "A React word cloud component using d3-cloud, with optional Web Worker support for smooth, non-blocking layouts",
+  "description": "A lightweight and customizable React word cloud library powered by d3-cloud, featuring built-in animations, tooltips, and flexible word rendering.",
   "homepage": "https://github.com/isoteriksoftware/react-word-cloud#readme",
   "license": "MIT",
   "keywords": [
