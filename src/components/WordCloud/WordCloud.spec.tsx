@@ -69,12 +69,12 @@ describe("WordCloud", () => {
   });
 
   it("renders tooltip when enableTooltip is true", async () => {
-    const customTooltipRenderer: WordCloudProps["tooltipRenderer"] = ({ word }) => {
+    const customTooltipRenderer: WordCloudProps["renderTooltip"] = ({ word }) => {
       return word ? <div data-testid="custom-tooltip">{word.text}</div> : null;
     };
 
     render(
-      <WordCloud {...defaultProps} enableTooltip={true} tooltipRenderer={customTooltipRenderer} />,
+      <WordCloud {...defaultProps} enableTooltip={true} renderTooltip={customTooltipRenderer} />,
     );
 
     const firstWord = screen.getByTestId(textTestId);

@@ -25,7 +25,7 @@ export type WordCloudProps = UseWordCloudArgs &
     gradients?: Gradient[];
     renderWord?: WordRenderer;
     enableTooltip?: boolean;
-    tooltipRenderer?: TooltipRenderer;
+    renderTooltip?: TooltipRenderer;
     onWordTooltip?: (word: ComputedWord) => void;
     containerStyle?: CSSProperties;
   };
@@ -42,7 +42,7 @@ const Cloud = ({
   fill = defaultFill,
   transition = "all .5s ease",
   renderWord = defaultWordRenderer,
-  tooltipRenderer = defaultTooltipRenderer,
+  renderTooltip = defaultTooltipRenderer,
   width,
   height,
   gradients,
@@ -117,8 +117,8 @@ const Cloud = ({
       </svg>
 
       {enableTooltip &&
-        tooltipRenderer &&
-        tooltipRenderer({
+        renderTooltip &&
+        renderTooltip({
           ...hoveredWord,
           svgElement: svgRef.current || undefined,
           layoutWidth: width,
