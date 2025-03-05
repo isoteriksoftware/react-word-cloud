@@ -56,6 +56,40 @@ describe("DefaultWordRenderer", () => {
     });
   });
 
+  it("re-renders with updated data", () => {
+    const { rerender } = render(<DefaultWordRenderer data={mockData} />);
+
+    const updatedWord: ComputedWord = {
+      ...mockWord,
+      text: "Updated Word",
+      value: 20,
+      x: 150,
+      y: 150,
+      size: 20,
+    };
+
+    const updatedData: WordRendererData = {
+      ...updatedWord,
+      index: 1,
+      fill: "#ff0000",
+      transition: "all 0.5s ease",
+      onWordClick: vi.fn(),
+      onWordMouseOver: vi.fn(),
+      onWordMouseOut: vi.fn(),
+    };
+
+    rerender(<DefaultWordRenderer data={updatedData} />);
+
+    const textElement = screen.getByTestId(textTestId);
+    expect(textElement).toHaveTextContent("Updated Word");
+    expect(textElement).toHaveStyle({
+      fontFamily: "Arial",
+      fontSize: "20px",
+      fill: "#ff0000",
+      transition: "all 0.5s ease",
+    });
+  });
+
   it("handles click events", () => {
     renderWord(mockData);
 
