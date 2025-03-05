@@ -1,6 +1,6 @@
 import { scaleOrdinal } from "d3-scale";
 import { schemeCategory10 } from "d3-scale-chromatic";
-import { FillValue, FontSizeValue, RotateValue, TooltipRenderer, WordRenderer } from "../types.ts";
+import { FillValue, FontSizeValue, RotateValue, TooltipRenderer, WordRenderer } from "../types";
 import { DefaultTooltipRenderer, DefaultWordRenderer } from "../../components";
 
 const defaultScaleOrdinal = scaleOrdinal(schemeCategory10);

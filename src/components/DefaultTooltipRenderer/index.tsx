@@ -1,6 +1,7 @@
 import { ComputedWord, computeWordPosition, Position, TooltipRendererData } from "../../core";
 import { CSSProperties, memo, useEffect, useState } from "react";
 import isDeepEqual from "react-fast-compare";
+import { generateTestId } from "../../core/utils/test";
 
 export type DefaultTooltipRendererProps = {
   data: TooltipRendererData;
@@ -9,6 +10,10 @@ export type DefaultTooltipRendererProps = {
   textStyle?: CSSProperties;
   valueStyle?: CSSProperties;
 };
+
+const containerTestId = generateTestId("DefaultTooltipRenderer", "container");
+const textTestId = generateTestId("DefaultTooltipRenderer", "text");
+const valueTestId = generateTestId("DefaultTooltipRenderer", "value");
 
 const TooltipRenderer = ({
   data,
@@ -64,9 +69,13 @@ const TooltipRenderer = ({
   };
 
   return (
-    <div style={mergedContainerStyle}>
-      <span style={mergedTextStyle}>{currentWord?.text}</span>
-      <span style={mergedValueStyle}>{currentWord?.value}</span>
+    <div style={mergedContainerStyle} data-testid={containerTestId}>
+      <span style={mergedTextStyle} data-testid={textTestId}>
+        {currentWord?.text}
+      </span>
+      <span style={mergedValueStyle} data-testid={valueTestId}>
+        {currentWord?.value}
+      </span>
     </div>
   );
 };
