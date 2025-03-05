@@ -52,19 +52,22 @@ const TooltipRenderer = ({
     borderRadius: "4px",
     transform: "translate(10px, 10px)",
     whiteSpace: "nowrap",
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
     ...containerStyle,
   };
 
   const mergedTextStyle: CSSProperties = {
     fontWeight: "bold",
-    marginRight: "6px",
     fontSize: "14px",
+    fontFamily: "Arial",
     ...textStyle,
   };
 
   const mergedValueStyle: CSSProperties = {
-    fontStyle: "italic",
     fontSize: "12px",
+    fontFamily: "monospace",
     ...valueStyle,
   };
 
