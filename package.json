@@ -12,10 +12,11 @@
     "react-word-cloud",
     "react word cloud",
     "word-cloud",
-    "cloud",
-    "react",
     "d3-cloud",
-    "d3"
+    "d3",
+    "react",
+    "cloud",
+    "visualization"
   ],
   "main": "./dist/react-word-cloud.umd.js",
   "module": "./dist/react-word-cloud.es.js",
