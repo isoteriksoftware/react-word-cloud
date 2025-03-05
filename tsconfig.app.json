@@ -32,7 +32,6 @@
     "allowSyntheticDefaultImports": true
   },
   "include": [
-    "src",
-    "node_modules/vitest/globals.d.ts"
+    "src"
   ]
 }
