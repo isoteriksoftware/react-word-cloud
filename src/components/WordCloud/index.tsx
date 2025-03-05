@@ -16,6 +16,7 @@ import {
 import { CSSProperties, Fragment, memo, useCallback, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
+import { generateTestId } from "../../core/utils/test";
 
 export type WordCloudProps = UseWordCloudArgs &
   Pick<WordRendererData, "onWordClick" | "onWordMouseOver" | "onWordMouseOut"> & {
@@ -33,6 +34,9 @@ type HoveredWordData = {
   word?: ComputedWord;
   event?: WordMouseEvent;
 };
+
+const containerTestId = generateTestId("WordCloud", "container");
+const svgTestId = generateTestId("WordCloud", "svg");
 
 const Cloud = ({
   fill = defaultFill,
@@ -84,8 +88,14 @@ const Cloud = ({
         height: "100%",
         ...containerStyle,
       }}
+      data-testid={containerTestId}
     >
-      <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} preserveAspectRatio="xMidYMid meet">
+      <svg
+        ref={svgRef}
+        viewBox={`0 0 ${width} ${height}`}
+        preserveAspectRatio="xMidYMid meet"
+        data-testid={svgTestId}
+      >
         <GradientDefs gradients={gradients} />
 
         <g transform={`translate(${width / 2},${height / 2})`}>
