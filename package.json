@@ -93,5 +93,8 @@
       "import": "./dist/react-word-cloud.es.js",
       "require": "./dist/react-word-cloud.umd.js"
     }
+  },
+  "engines": {
+    "node": ">=20"
   }
 }
