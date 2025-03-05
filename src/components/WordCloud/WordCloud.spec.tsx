@@ -24,12 +24,14 @@ describe("WordCloud", () => {
     expect(screen.getByTestId(svgTestId)).toBeInTheDocument();
   });
 
-  it("applies custom container styles", () => {
+  it("applies custom container styles", async () => {
     const containerStyle: WordCloudProps["containerStyle"] = { background: "#ff0000" };
     render(<WordCloud {...defaultProps} containerStyle={containerStyle} />);
 
-    const container = screen.getByTestId(containerTestId);
-    expect(container).toHaveStyle({ background: "#ff0000" });
+    await waitFor(() => {
+      const container = screen.getByTestId(containerTestId);
+      expect(container).toHaveStyle({ background: "#ff0000" });
+    });
   });
 
   it("calls onWordClick when a word is clicked", async () => {
@@ -85,13 +87,15 @@ describe("WordCloud", () => {
     expect(screen.getByTestId("custom-tooltip")).toBeInTheDocument();
   });
 
-  it("applies custom fill function", () => {
+  it("applies custom fill function", async () => {
     const customFill: WordCloudProps["fill"] = (_, index) => (index === 0 ? "#ff0000" : "#0000ff");
 
     render(<WordCloud {...defaultProps} fill={customFill} />);
 
-    const firstWord = screen.getByTestId(textTestId);
-    expect(firstWord).toHaveStyle({ fill: "#ff0000" });
+    await waitFor(() => {
+      const firstWord = screen.getByTestId(textTestId);
+      expect(firstWord).toHaveStyle({ fill: "#ff0000" });
+    });
   });
 
   it("applies custom transition", async () => {
