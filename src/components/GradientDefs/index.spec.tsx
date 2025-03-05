@@ -4,9 +4,16 @@ import { GradientDefs } from "./index";
 import { Gradient } from "../../core";
 
 describe("GradientDefs", () => {
+  const renderGradients = (gradients?: Gradient[]) =>
+    render(
+      <svg>
+        <GradientDefs gradients={gradients} />
+      </svg>,
+    );
+
   it("returns null when no gradients are provided", () => {
-    const { container } = render(<GradientDefs />);
-    expect(container.firstChild).toBeNull();
+    const { container } = renderGradients();
+    expect(container.querySelector("defs")).toBeNull();
   });
 
   it("renders linear gradient correctly", () => {
@@ -22,11 +29,7 @@ describe("GradientDefs", () => {
       },
     ];
 
-    const { container } = render(
-      <svg>
-        <GradientDefs gradients={gradients} />
-      </svg>,
-    );
+    const { container } = renderGradients(gradients);
 
     const linearGradient = container.querySelector("linearGradient");
     expect(linearGradient).toBeTruthy();
@@ -51,11 +54,7 @@ describe("GradientDefs", () => {
       },
     ];
 
-    const { container } = render(
-      <svg>
-        <GradientDefs gradients={gradients} />
-      </svg>,
-    );
+    const { container } = renderGradients(gradients);
 
     const radialGradient = container.querySelector("radialGradient");
     expect(radialGradient).toBeTruthy();
@@ -88,11 +87,7 @@ describe("GradientDefs", () => {
       },
     ];
 
-    const { container } = render(
-      <svg>
-        <GradientDefs gradients={gradients} />
-      </svg>,
-    );
+    const { container } = renderGradients(gradients);
 
     expect(container.querySelectorAll("linearGradient")).toHaveLength(1);
     expect(container.querySelectorAll("radialGradient")).toHaveLength(1);
