@@ -19,7 +19,7 @@ import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
 
 export type WordCloudProps = UseWordCloudArgs &
-  Pick<WordRendererData, "onWordClick" | "onWordMouseOver" | "onWordMouseOut"> & {
+  Partial<Pick<WordRendererData, "onWordClick" | "onWordMouseOver" | "onWordMouseOut">> & {
     fill?: FillValue;
     transition?: TransitionValue;
     gradients?: Gradient[];
