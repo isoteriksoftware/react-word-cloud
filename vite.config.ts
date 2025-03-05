@@ -3,23 +3,26 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 import tsConfigPaths from "vite-tsconfig-paths";
-import { EsLinter, linterPlugin } from "vite-plugin-linter";
 import * as packageJson from "./package.json";
 
-export default defineConfig((configEnv) => ({
+export default defineConfig(() => ({
   base: "./",
   plugins: [
     react(),
     tsConfigPaths(),
-    linterPlugin({
-      include: ["./src}/**/*.{ts,tsx}"],
-      linters: [new EsLinter({ configEnv })],
-    }),
     dts({
       include: ["src/components", "src/core", "src/index.ts"],
       tsconfigPath: "./tsconfig.app.json",
     }),
   ],
+  test: {
+    globals: true,
+    environment: "jsdom",
+    setupFiles: "./src/setupTests.ts",
+    coverage: {
+      reporters: ["text", "html"],
+    },
+  },
   build: {
     minify: false,
     lib: {
