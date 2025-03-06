@@ -1,5 +1,4 @@
 import {
-  ComputedWordData,
   defaultFill,
   defaultTooltipRenderer,
   defaultWordRenderer,
@@ -27,7 +26,6 @@ export type WordCloudProps = UseWordCloudArgs &
     renderWord?: WordRenderer;
     enableTooltip?: boolean;
     renderTooltip?: TooltipRenderer;
-    onWordTooltip?: (word: ComputedWordData) => void;
     containerStyle?: CSSProperties;
   };
 
