@@ -7,8 +7,9 @@ import {
 import { CSSProperties, memo, useEffect, useState } from "react";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
+import { useFloating, UseFloatingOptions } from "@floating-ui/react-dom";
 
-export type DefaultTooltipRendererProps = {
+export type DefaultTooltipRendererProps = UseFloatingOptions & {
   data: TooltipRendererData;
   transitionDuration?: number;
   containerStyle?: CSSProperties;
@@ -26,6 +27,7 @@ const TooltipRenderer = ({
   containerStyle,
   textStyle,
   valueStyle,
+  ...useFloatingOptions
 }: DefaultTooltipRendererProps) => {
   const [position, setPosition] = useState<Position>({
     x: 0,
@@ -34,15 +36,18 @@ const TooltipRenderer = ({
   const [visible, setVisible] = useState(false);
   const [currentWord, setCurrentWord] = useState<FinalWordData>();
 
+  const { refs, floatingStyles } = useFloating(useFloatingOptions);
+
   useEffect(() => {
     if (data.word) {
       setCurrentWord(data.word);
       setPosition(computeWordScreenPosition(data));
+      refs.setReference(data.wordElement ?? null);
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [data, transitionDuration]);
+  }, [data, refs]);
 
   const mergedContainerStyle: CSSProperties = {
     position: "absolute",
@@ -61,6 +66,7 @@ const TooltipRenderer = ({
     alignItems: "center",
     gap: "10px",
     ...containerStyle,
+    ...floatingStyles,
   };
 
   const mergedTextStyle: CSSProperties = {
@@ -77,7 +83,7 @@ const TooltipRenderer = ({
   };
 
   return (
-    <div style={mergedContainerStyle} data-testid={containerTestId}>
+    <div ref={refs.setFloating} style={mergedContainerStyle} data-testid={containerTestId}>
       <span style={mergedTextStyle} data-testid={textTestId}>
         {currentWord?.text}
       </span>
