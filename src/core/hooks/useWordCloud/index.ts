@@ -31,19 +31,19 @@ export const useWordCloud = ({
   const computationId = useRef(0);
   const lastProcessedWordIndex = useRef(0);
 
-  const handleStartCompute = () => {
+  const handleStartComputation = () => {
     lastProcessedWordIndex.current = 0;
     setIsLoading(true);
     setComputedWords([]);
     onStartComputation?.();
   };
 
-  const handleCompleteCompute = (words: ComputedWordData[]) => {
+  const handleCompleteComputation = (words: ComputedWordData[]) => {
     setIsLoading(false);
     onCompleteComputation?.(words);
   };
 
-  const handleComputeWord = (word: ComputedWordData, index: number) => {
+  const handleWorWordComputed = (word: ComputedWordData, index: number) => {
     onWordComputed?.(word, index);
   };
 
@@ -53,7 +53,7 @@ export const useWordCloud = ({
     setPendingComputation(true);
     computationId.current += 1;
 
-    handleStartCompute();
+    handleStartComputation();
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [
     height,
@@ -89,7 +89,7 @@ export const useWordCloud = ({
 
       computeWords(finalConfig, (computedWord) => {
         if (currentComputationId === computationId.current) {
-          handleComputeWord(computedWord, lastProcessedWordIndex.current);
+          handleWorWordComputed(computedWord, lastProcessedWordIndex.current);
           lastProcessedWordIndex.current += 1;
 
           setComputedWords((prevWords) => {
@@ -99,7 +99,7 @@ export const useWordCloud = ({
       }).then((words) => {
         if (currentComputationId === computationId.current) {
           setPendingComputation(false);
-          handleCompleteCompute(words);
+          handleCompleteComputation(words);
         }
       });
     }
