@@ -59,7 +59,7 @@ function App() {
 export default App;
 ```
 
-### Gradients Support
+### Gradient Support
 Apply attractive linear or radial gradients to your word cloud.
 
 ```tsx
@@ -116,7 +116,7 @@ export default App;
 ```
 
 ### Built-In AnimatedWordRenderer
-For smooth animations on word entrance, use the built-in AnimatedWordRenderer. It animates opacity and scale transitions for each word.
+For smooth animations on word entrance, use the built-in `AnimatedWordRenderer`. It animates opacity and scale transitions for each word.
 
 ```tsx
 import { Word, WordCloud, WordCloudProps, AnimatedWordRenderer } from "react-word-cloud";
@@ -440,8 +440,7 @@ export default App;
 ```
 
 ### useWordCloud Hook
-For ultimate flexibility, use the `useWordCloud` hook to handle layout computations asynchronously while you fully control how the words are rendered and how the SVG container is structured. The hook also accepts the `timeInterval` prop to control the maximum amount of time the browser spends on computations during each timestep
-and also similar props accepted by the `WordCloud` component.
+For ultimate flexibility, use the `useWordCloud` hook to handle layout computations asynchronously while you fully control how the words are rendered and how the SVG container is structured. The hook also accepts the `timeInterval` prop to control the maximum amount of time the browser spends on computations during each timestep and also similar props accepted by the `WordCloud` component.
 
 ```tsx
 import { defaultFill, defaultFontSize, useWordCloud, Word, WordCloudProps } from "react-word-cloud";
@@ -668,10 +667,9 @@ The return value of the `useWordCloud` hook is an object containing the computed
 This utility function computes the screen position of a word in the word cloud layout. It takes the `TooltipRendererData` object as an argument and returns an object containing the x and y screen coordinates of the word.
 This is handy when you need to position a custom tooltip or other elements relative to a word in the word cloud.
 
-
 ## Contributing
 
-Contributions are welcome! Please read our [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing](./CONTRIBUTING.md)
+Contributions are welcome! Please read our [Code of Conduct](./CODE_OF_CONDUCT.md) and [Contributing](./CONTRIBUTING.md) guidelines.
 
 ## License
 
