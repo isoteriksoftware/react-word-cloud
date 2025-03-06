@@ -58,7 +58,12 @@ function App() {
 
 export default App;
 ```
+<figure>
+  <img src="https://github.com/user-attachments/assets/83e8e3ce-3bd1-4f98-aa41-e744f2f9cb7f" alt="Basic Example Output">
+  <figcaption>Basic Example Output</figcaption>
+</figure>
 
+<br/>
 ### Gradient Support
 Apply attractive linear or radial gradients to your word cloud.
 
@@ -666,6 +671,28 @@ The return value of the `useWordCloud` hook is an object containing the computed
 #### computeWordScreenPosition
 This utility function computes the screen position of a word in the word cloud layout. It takes the `TooltipRendererData` object as an argument and returns an object containing the x and y screen coordinates of the word.
 This is handy when you need to position a custom tooltip or other elements relative to a word in the word cloud.
+
+## Development & Testing
+
+This library is built using Vite, yalc, and Vitest for development and testing. To get started, clone the repository and run the following commands:
+
+```bash
+# Install dependencies
+npm install
+
+# Run Tests
+npm test
+npm test:coverage
+
+# Build and publish the package to yalc
+npm run build:local
+
+# Link the package to a local react application
+yalc link react-word-cloud
+
+# Unlink the package
+yalc remove react-word-cloud
+```
 
 ## Contributing
 
