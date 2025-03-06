@@ -1,6 +1,6 @@
 import { Property } from "csstype";
 import cloud from "d3-cloud";
-import React, { ReactNode } from "react";
+import React, { ReactNode, Ref } from "react";
 
 export type Position = {
   x: number;
@@ -53,13 +53,14 @@ export type WordRendererData = FinalWordData & {
 };
 export type TooltipRendererData = {
   word?: FinalWordData;
+  wordElement?: SVGTextElement | null;
   svgElement?: SVGElement;
   event?: WordMouseEvent;
   layoutWidth: number;
   layoutHeight: number;
 };
 
-export type WordRenderer = (data: WordRendererData) => ReactNode;
+export type WordRenderer = (data: WordRendererData, ref?: Ref<SVGTextElement>) => ReactNode;
 export type TooltipRenderer = (data: TooltipRendererData) => ReactNode;
 
 export type WordCloudConfig = {

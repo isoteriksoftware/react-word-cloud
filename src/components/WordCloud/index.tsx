@@ -13,7 +13,7 @@ import {
   WordRenderer,
   WordRendererData,
 } from "../../core";
-import { CSSProperties, Fragment, memo, useCallback, useRef, useState } from "react";
+import { CSSProperties, Fragment, memo, useCallback, useMemo, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
@@ -31,6 +31,7 @@ export type WordCloudProps = UseWordCloudArgs &
 
 type HoveredWordData = {
   word?: FinalWordData;
+  wordElement?: SVGTextElement | null;
   event?: WordMouseEvent;
 };
 
@@ -56,12 +57,14 @@ const Cloud = ({
   const [hoveredWord, setHoveredWord] = useState<HoveredWordData>({});
 
   const svgRef = useRef<SVGSVGElement>(null);
+  const wordRefs = useRef<Record<number, SVGTextElement | null>>({});
 
   const handleWordMouseOver = useCallback(
     (word: FinalWordData, index: number, event: WordMouseEvent) => {
       setHoveredWord({
         word,
         event,
+        wordElement: wordRefs.current[index],
       });
       onWordMouseOver?.(word, index, event);
     },
@@ -70,13 +73,27 @@ const Cloud = ({
 
   const handleWordMouseOut = useCallback(
     (word: FinalWordData, index: number, event: WordMouseEvent) => {
-      setHoveredWord({
+      setHoveredWord((prev) => ({
+        ...prev,
+        event,
         word: undefined,
-        event: undefined,
-      });
+      }));
       onWordMouseOut?.(word, index, event);
     },
     [onWordMouseOut],
+  );
+
+  const tooltip = useMemo(
+    () =>
+      enableTooltip &&
+      renderTooltip &&
+      renderTooltip({
+        ...hoveredWord,
+        svgElement: svgRef.current || undefined,
+        layoutWidth: width,
+        layoutHeight: height,
+      }),
+    [enableTooltip, hoveredWord, renderTooltip, width, height],
   );
 
   return (
@@ -109,20 +126,15 @@ const Cloud = ({
               ...word,
             };
 
-            const renderedWord = renderWord(data);
+            const renderedWord = renderWord(data, (ref) => {
+              wordRefs.current[index] = ref;
+            });
             return <Fragment key={index}>{renderedWord}</Fragment>;
           })}
         </g>
       </svg>
 
-      {enableTooltip &&
-        renderTooltip &&
-        renderTooltip({
-          ...hoveredWord,
-          svgElement: svgRef.current || undefined,
-          layoutWidth: width,
-          layoutHeight: height,
-        })}
+      {tooltip}
     </div>
   );
 };
