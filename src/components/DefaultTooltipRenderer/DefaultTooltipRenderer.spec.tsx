@@ -68,28 +68,6 @@ describe("DefaultTooltipRenderer", () => {
     expect(tooltipContainer).toHaveStyle({ opacity: "0" });
   });
 
-  it("updates position when word data changes", () => {
-    const { rerender } = render(<DefaultTooltipRenderer data={mockData} />);
-
-    const newData: TooltipRendererData = {
-      word: {
-        ...mockWord,
-        x: 200,
-        y: 200,
-      },
-      layoutWidth: 1000,
-      layoutHeight: 500,
-    };
-
-    rerender(<DefaultTooltipRenderer data={newData} />);
-    const tooltipContainer = screen.getByTestId(containerTestId);
-
-    expect(tooltipContainer).toHaveStyle({
-      left: "200px",
-      top: "200px",
-    });
-  });
-
   it("applies correct transition duration", () => {
     const customDuration = 500;
     render(<DefaultTooltipRenderer data={mockData} transitionDuration={customDuration} />);

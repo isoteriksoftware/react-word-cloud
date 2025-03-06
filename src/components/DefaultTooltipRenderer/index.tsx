@@ -1,13 +1,8 @@
-import {
-  computeWordScreenPosition,
-  FinalWordData,
-  Position,
-  TooltipRendererData,
-} from "../../core";
+import { FinalWordData, TooltipRendererData, useTooltip } from "../../core";
 import { CSSProperties, memo, useEffect, useState } from "react";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
-import { useFloating, UseFloatingOptions } from "@floating-ui/react-dom";
+import { UseFloatingOptions } from "@floating-ui/react-dom";
 
 export type DefaultTooltipRendererProps = UseFloatingOptions & {
   data: TooltipRendererData;
@@ -29,30 +24,21 @@ const TooltipRenderer = ({
   valueStyle,
   ...useFloatingOptions
 }: DefaultTooltipRendererProps) => {
-  const [position, setPosition] = useState<Position>({
-    x: 0,
-    y: 0,
-  });
   const [visible, setVisible] = useState(false);
   const [currentWord, setCurrentWord] = useState<FinalWordData>();
 
-  const { refs, floatingStyles } = useFloating(useFloatingOptions);
+  const { refs, floatingStyles } = useTooltip({ data, ...useFloatingOptions });
 
   useEffect(() => {
     if (data.word) {
       setCurrentWord(data.word);
-      setPosition(computeWordScreenPosition(data));
-      refs.setReference(data.wordElement ?? null);
       setVisible(true);
     } else {
       setVisible(false);
     }
-  }, [data, refs]);
+  }, [data]);
 
   const mergedContainerStyle: CSSProperties = {
-    position: "absolute",
-    left: `${position.x}px`,
-    top: `${position.y}px`,
     opacity: visible ? 1 : 0,
     transition: `all ${transitionDuration}ms ease`,
     pointerEvents: "none",
