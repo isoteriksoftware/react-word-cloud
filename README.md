@@ -58,12 +58,13 @@ function App() {
 
 export default App;
 ```
+
 <figure>
   <img src="https://github.com/user-attachments/assets/83e8e3ce-3bd1-4f98-aa41-e744f2f9cb7f" alt="Basic Example Output">
+  <br/>
   <figcaption>Basic Example Output</figcaption>
 </figure>
 
-<br/>
 ### Gradient Support
 Apply attractive linear or radial gradients to your word cloud.
 
@@ -119,6 +120,12 @@ function App() {
 
 export default App;
 ```
+
+<figure>
+  <img src="https://github.com/user-attachments/assets/3c0092de-db38-4cd7-92a3-d7b3af7fa776" alt="Gradient Example Output">
+  <br/>
+  <figcaption>Gradient Example Output</figcaption>
+</figure>
 
 ### Built-In AnimatedWordRenderer
 For smooth animations on word entrance, use the built-in `AnimatedWordRenderer`. It animates opacity and scale transitions for each word.
@@ -191,6 +198,12 @@ function App() {
 export default App;
 ```
 
+<figure>
+  <img src="https://github.com/user-attachments/assets/bcdf7672-a781-4d1c-9080-15a840438d20" alt="Tooltip Example Output">
+  <br/>
+  <figcaption>Tooltip Example Output</figcaption>
+</figure>
+
 You can customize the default tooltip styles by rendering the `DefaultTooltip` component using the `renderTooltip` prop:
 
 ```tsx
@@ -243,6 +256,12 @@ function App() {
 
 export default App;
 ```
+
+<figure>
+  <img src="https://github.com/user-attachments/assets/840768ce-5bc2-49f6-8417-ed8082da9689" alt="Customized Tooltip Example Output">
+  <br/>
+  <figcaption>Customized Tooltip Example Output</figcaption>
+</figure>
 
 #### Custom Tooltip Renderer
 For full control over the tooltip rendering, you can provide your own custom tooltip renderer using the `renderTooltip` prop:
@@ -311,6 +330,12 @@ function App() {
 
 export default App;
 ```
+
+<figure>
+  <img src="https://github.com/user-attachments/assets/0d218aec-bdbd-4c92-86a8-dee7c9926b59" alt="Custom Tooltip Example Output">
+  <br/>
+  <figcaption>Custom Tooltip Example Output</figcaption>
+</figure>
 
 ### Event Handling
 You can handle mouse and computation events on words by providing event handlers to the `WordCloud` component:
@@ -443,6 +468,12 @@ function App() {
 
 export default App;
 ```
+
+<figure>
+  <img src="https://github.com/user-attachments/assets/3eb56461-93c2-4bb4-87c5-f7e323ebd962" alt="Customized Cloud Example Output">
+  <br/>
+  <figcaption>Customized Cloud Example Output</figcaption>
+</figure>
 
 ### useWordCloud Hook
 For ultimate flexibility, use the `useWordCloud` hook to handle layout computations asynchronously while you fully control how the words are rendered and how the SVG container is structured. The hook also accepts the `timeInterval` prop to control the maximum amount of time the browser spends on computations during each timestep and also similar props accepted by the `WordCloud` component.
