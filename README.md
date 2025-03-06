@@ -712,8 +712,8 @@ This library is built using Vite, yalc, and Vitest for development and testing. 
 npm install
 
 # Run Tests
-npm test
-npm test:coverage
+npm run test
+npm run test:coverage
 
 # Build and publish the package to yalc
 npm run build:local
