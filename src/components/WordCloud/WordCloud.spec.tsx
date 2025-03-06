@@ -4,7 +4,6 @@ import { WordCloud, WordCloudProps } from "./index";
 import { generateTestId } from "../../core/utils/test";
 
 describe("WordCloud", () => {
-  const containerTestId = generateTestId("WordCloud", "container");
   const svgTestId = generateTestId("WordCloud", "svg");
   const textTestId = generateTestId("DefaultWordRenderer", "text");
 
@@ -20,18 +19,7 @@ describe("WordCloud", () => {
   it("renders without crashing", () => {
     render(<WordCloud {...defaultProps} />);
 
-    expect(screen.getByTestId(containerTestId)).toBeInTheDocument();
     expect(screen.getByTestId(svgTestId)).toBeInTheDocument();
-  });
-
-  it("applies custom container styles", async () => {
-    const containerStyle: WordCloudProps["containerStyle"] = { background: "#ff0000" };
-    render(<WordCloud {...defaultProps} containerStyle={containerStyle} />);
-
-    await waitFor(() => {
-      const container = screen.getByTestId(containerTestId);
-      expect(container).toHaveStyle({ background: "#ff0000" });
-    });
   });
 
   it("calls onWordClick when a word is clicked", async () => {

@@ -13,7 +13,7 @@ import {
   WordRenderer,
   WordRendererData,
 } from "../../core";
-import { CSSProperties, Fragment, memo, useCallback, useMemo, useRef, useState } from "react";
+import { Fragment, memo, SVGProps, useCallback, useMemo, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
@@ -26,7 +26,7 @@ export type WordCloudProps = UseWordCloudArgs &
     renderWord?: WordRenderer;
     enableTooltip?: boolean;
     renderTooltip?: TooltipRenderer;
-    containerStyle?: CSSProperties;
+    svgProps?: Omit<SVGProps<SVGSVGElement>, "ref" | "children">;
   };
 
 type HoveredWordData = {
@@ -35,7 +35,6 @@ type HoveredWordData = {
   event?: WordMouseEvent;
 };
 
-const containerTestId = generateTestId("WordCloud", "container");
 const svgTestId = generateTestId("WordCloud", "svg");
 
 const Cloud = ({
@@ -50,7 +49,7 @@ const Cloud = ({
   onWordMouseOver,
   onWordMouseOut,
   enableTooltip,
-  containerStyle,
+  svgProps,
   ...useWordCloudArgs
 }: WordCloudProps) => {
   const { computedWords } = useWordCloud({ width, height, ...useWordCloudArgs });
@@ -97,21 +96,8 @@ const Cloud = ({
   );
 
   return (
-    <div
-      style={{
-        position: "relative",
-        width: "100%",
-        height: "100%",
-        ...containerStyle,
-      }}
-      data-testid={containerTestId}
-    >
-      <svg
-        ref={svgRef}
-        viewBox={`0 0 ${width} ${height}`}
-        preserveAspectRatio="xMidYMid meet"
-        data-testid={svgTestId}
-      >
+    <>
+      <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} data-testid={svgTestId} {...svgProps}>
         <GradientDefs gradients={gradients} />
 
         <g transform={`translate(${width / 2},${height / 2})`}>
@@ -135,7 +121,7 @@ const Cloud = ({
       </svg>
 
       {tooltip}
-    </div>
+    </>
   );
 };
 
