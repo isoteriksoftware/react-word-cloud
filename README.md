@@ -29,6 +29,56 @@ npm install react-word-cloud
 yarn add react-word-cloud
 ```
 
+## Table of Contents
+<!-- TOC -->
+  * [Features](#features)
+  * [Demo](#demo)
+  * [Installation](#installation)
+  * [Table of Contents](#table-of-contents)
+  * [Usage](#usage)
+    * [Basic Example](#basic-example)
+    * [Gradient Support](#gradient-support)
+    * [Built-In AnimatedWordRenderer](#built-in-animatedwordrenderer)
+    * [Tooltips](#tooltips)
+      * [Using the Default Tooltip](#using-the-default-tooltip)
+      * [Custom Tooltip Renderer](#custom-tooltip-renderer)
+    * [Event Handling](#event-handling)
+    * [Configuring Other Properties](#configuring-other-properties)
+    * [useWordCloud Hook](#usewordcloud-hook)
+  * [API Reference](#api-reference)
+    * [WordCloud](#wordcloud)
+      * [Props](#props)
+    * [DefaultWordRenderer](#defaultwordrenderer)
+      * [Props](#props-1)
+    * [AnimatedWordRenderer](#animatedwordrenderer)
+      * [Props](#props-2)
+    * [DefaultTooltipRenderer](#defaulttooltiprenderer)
+      * [Props](#props-3)
+    * [useWordCloud Hook](#usewordcloud-hook-1)
+      * [Parameters](#parameters)
+      * [Return Value](#return-value)
+    * [useTooltip Hook](#usetooltip-hook)
+      * [Parameters](#parameters-1)
+      * [Return Value](#return-value-1)
+    * [Word](#word)
+      * [Properties](#properties)
+    * [Gradient](#gradient)
+      * [Properties](#properties-1)
+    * [GradientStop](#gradientstop)
+      * [Properties](#properties-2)
+    * [ComputedWordData](#computedworddata)
+      * [Properties](#properties-3)
+    * [FinalWordData](#finalworddata)
+      * [Properties](#properties-4)
+    * [WordRendererData](#wordrendererdata)
+      * [Properties](#properties-5)
+    * [TooltipRendererData](#tooltiprendererdata)
+      * [Properties](#properties-6)
+  * [Development & Testing](#development--testing)
+  * [Contributing](#contributing)
+  * [License](#license)
+<!-- TOC -->
+
 ## Usage
 
 ### Basic Example
