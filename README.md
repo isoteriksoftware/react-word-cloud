@@ -1,3 +1,5 @@
+![Preview](https://github.com/user-attachments/assets/97fdc696-b270-43ec-b7bc-8e76a519fe29)
+
 [![Version](https://img.shields.io/npm/v/react-word-cloud)](https://www.npmjs.com/package/react-word-cloud)
 [![Downloads](https://img.shields.io/npm/dt/react-word-cloud.svg)](https://www.npmjs.com/package/react-word-cloud)
 
@@ -11,6 +13,7 @@
 - **Gradient Support:** Apply linear or radial gradients to your word cloud with ease.
 - **Custom Tooltips:** Enable a default tooltip with animated transitions, customize it, or provide your own custom tooltip renderer.
 - **useWordCloud Hook:** Perform layout computations while retaining full control over the rendered SVG.
+- **useTooltip Hook:** Handle tooltip interactions with ease using in-built floating-ui support.
 - **SVG-Based:** Render crisp, scalable visuals that are responsive by design.
 
 ## Demo
@@ -143,8 +146,8 @@ const words: Word[] = [
   { text: "Cloud", value: 200 },
 ];
 
-const animatedWordRenderer: WordCloudProps["renderWord"] = (data) => (
-  <AnimatedWordRenderer data={data} animationDelay={(_word, index) => index * 50} />
+const animatedWordRenderer: WordCloudProps["renderWord"] = (data, ref) => (
+  <AnimatedWordRenderer ref={ref} data={data} animationDelay={(_word, index) => index * 50} />
 );
 
 function App() {
@@ -163,8 +166,12 @@ function App() {
 export default App;
 ```
 
+> **Hint** <br/>
+> - When using a custom renderer, you need to utilize the `ref` parameter provided to the function to set up the ref for the word element. This is required when you need tooltips, but it is recommended to always set the `ref` for the word element.
+> - If you don't want to modify any properties of the `AnimatedWordRenderer` component, you can import and use the `animatedWordRenderer` constant from the library.
+
 ### Tooltips
-**react-word-cloud** includes a default tooltip implementation with animated transitions. You can enable it or completely override it with your own tooltip renderer for full customization.
+**react-word-cloud** includes a default tooltip implementation (powered by floating-ui) with animated transitions. You can enable it or completely override it with your own tooltip renderer for full customization.
 
 #### Using the Default Tooltip
 Enable the default tooltip by setting the `enableTooltip` prop to true:
@@ -207,7 +214,7 @@ export default App;
 You can customize the default tooltip styles by rendering the `DefaultTooltip` component using the `renderTooltip` prop:
 
 ```tsx
-import { Word, WordCloud, WordCloudProps, DefaultTooltipRenderer } from "react-word-cloud";
+import { DefaultTooltipRenderer, Word, WordCloud, WordCloudProps } from "react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -222,6 +229,8 @@ const words: Word[] = [
 const animatedWordRenderer: WordCloudProps["renderTooltip"] = (data) => (
   <DefaultTooltipRenderer
     data={data}
+    placement="bottom"
+    transform={false}
     containerStyle={{
       borderRadius: "10px",
       flexDirection: "column",
@@ -263,11 +272,14 @@ export default App;
   <figcaption>Customized Tooltip Example Output</figcaption>
 </figure>
 
+> **Hint**<br/>
+> The `DefaultTooltipRenderer` component accepts additional props for customizing the tooltip including `UseFloatingOptions` props used by the `useFloating` hook internally.
+
 #### Custom Tooltip Renderer
 For full control over the tooltip rendering, you can provide your own custom tooltip renderer using the `renderTooltip` prop:
 
 ```tsx
-import { Word, WordCloud, WordCloudProps, computeWordScreenPosition } from "react-word-cloud";
+import { Word, WordCloud, WordCloudProps, TooltipRendererData, useTooltip } from "react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -279,15 +291,13 @@ const words: Word[] = [
   { text: "Cloud", value: 200 },
 ];
 
-const animatedWordRenderer: WordCloudProps["renderTooltip"] = (data) => {
-  const pos = computeWordScreenPosition(data);
+const MyFloatingTooltip = ({ data }: { data: TooltipRendererData }) => {
+  const { refs, floatingStyles } = useTooltip({ data, placement: "top", transform: false });
 
   return (
     <div
+      ref={refs.setFloating}
       style={{
-        position: "absolute",
-        left: `${pos.x}px`,
-        top: `${pos.y}px`,
         background: "linear-gradient(135deg, rgba(50,50,50,0.95), rgba(30,30,30,0.95))",
         color: "#fff",
         padding: "10px 16px",
@@ -298,6 +308,7 @@ const animatedWordRenderer: WordCloudProps["renderTooltip"] = (data) => {
         pointerEvents: "none",
         zIndex: 1000,
         opacity: data.word ? 1 : 0,
+        ...floatingStyles,
       }}
     >
       <div style={{ fontWeight: "bold", fontSize: "14px", marginBottom: "4px" }}>
@@ -308,6 +319,10 @@ const animatedWordRenderer: WordCloudProps["renderTooltip"] = (data) => {
     </div>
   );
 };
+
+const tooltipRenderer: WordCloudProps["renderTooltip"] = (data) => (
+  <MyFloatingTooltip data={data} />
+);
 
 function App() {
   return (
@@ -322,7 +337,7 @@ function App() {
         width={300}
         height={200}
         enableTooltip
-        renderTooltip={animatedWordRenderer}
+        renderTooltip={tooltipRenderer}
       />
     </div>
   );
@@ -332,10 +347,15 @@ export default App;
 ```
 
 <figure>
-  <img src="https://github.com/user-attachments/assets/0d218aec-bdbd-4c92-86a8-dee7c9926b59" alt="Custom Tooltip Example Output">
+  <img src="https://github.com/user-attachments/assets/2ec420ee-bac7-4965-ad8c-a9ed8f568cd4" alt="Custom Tooltip Example Output">
   <br/>
   <figcaption>Custom Tooltip Example Output</figcaption>
 </figure>
+
+> **Hint**<br/>
+> - The library comes with `@floating-ui/react-dom` installed for handling tooltips, and we recommend using it for consistent and accessible floating UIs.
+> - `@floating-ui/react-dom` is not a peer dependency of `react-word-cloud`, and you can use any floating UI library of your choice but if you want to use it, the `useTooltip` hook is provided for easy integration.
+> - When using the `useTooltip` hook, the `ref` for the word is configured automatically, but you still have to manage the tooltip's content and styles including setting the `ref` for the floating element (this is required).
 
 ### Event Handling
 You can handle mouse and computation events on words by providing event handlers to the `WordCloud` component:
@@ -420,7 +440,7 @@ const words: Word[] = [
   { text: "Cloud", value: 200 },
 ];
 
-const fonts: string[] = ["Arial", "Courier New", "cursive"];
+const fonts: string[] = ["Arial", "Courier New", "Cursive"];
 const rotationWeights: number[] = [0, 0, 90, 270];
 
 const resolveFont: WordCloudProps["font"] = (_word, index) => {
@@ -445,24 +465,30 @@ const resolveRotate: WordCloudProps["rotate"] = () => {
 
 function App() {
   return (
-    <WordCloud
-      words={words}
-      width={300}
-      height={200}
-      font={resolveFont}
-      fontWeight={resolveFontWeight}
-      fontSize={defaultFontSize}
-      rotate={resolveRotate}
-      fontStyle="normal"
-      spiral="rectangular"
-      transition="all .3s ease"
-      padding={2}
-      timeInterval={1}
-      containerStyle={{
+    <div
+      style={{
         width: "400px",
         height: "400px",
       }}
-    />
+    >
+      <WordCloud
+        words={words}
+        width={300}
+        height={200}
+        font={resolveFont}
+        fontWeight={resolveFontWeight}
+        fontSize={defaultFontSize}
+        rotate={resolveRotate}
+        fontStyle="normal"
+        spiral="rectangular"
+        transition="all .3s ease"
+        padding={2}
+        timeInterval={1}
+        svgProps={{
+          preserveAspectRatio: "xMidYMid slice",
+        }}
+      />
+    </div>
   );
 }
 
@@ -491,7 +517,7 @@ const words: Word[] = [
   { text: "Cloud", value: 200 },
 ];
 
-const fonts: string[] = ["Arial", "Courier New", "cursive"];
+const fonts: string[] = ["Arial", "Courier New", "Cursive"];
 const rotationWeights: number[] = [0, 0, 90, 270];
 
 const resolveFont: WordCloudProps["font"] = (_word, index) => {
@@ -616,15 +642,15 @@ export default App;
 - **gradients**: `Gradient[]` <br/>
   An array of gradient objects to be used for rendering the words. Each gradient object should have an `id` property representing the gradient ID, a `type` property representing the gradient type (`linear` or `radial`), and a `stops` property representing the gradient stops.
   This only applies when the `fill` prop is set to a function that returns a gradient fill.
-- **containerStyle**: `React.CSSProperties` <br/>
-  The style object to be applied to the container element of the word cloud. This is useful for customizing the styles of the container.
+- **svgProps**: `Omit<SVGProps<SVGSVGElement>, "ref" | "children">` <br/>
+    Additional props to be passed to the SVG container element of the word cloud. This is useful for customizing the SVG container.
 - **enableTooltip**: `boolean` <br/>
   A boolean value indicating whether to enable the default tooltip for the words in the word cloud. When set to `true`, a tooltip will be displayed when hovering over words. <br/>
   Default: `false`
 - **renderTooltip**: `(data: TooltipRendererData) => React.ReactNode` <br/>
   A function that returns the custom tooltip component to be rendered for the words in the word cloud. This function receives the tooltip data object as an argument and should return a React component representing the tooltip. <br/>
   Default: `<DefaultTooltipRenderer />`
-- **renderWord**: `(data: WordRendererData) => React.ReactNode` <br/>
+- **renderWord**: `(data: WordRendererData, ref?: Ref<SVGTextElement>) => React.ReactNode` <br/>
   A function that returns the custom word component to be rendered for the words in the word cloud. This function receives the word data object as an argument and should return a React component representing the word. <br/>
   Default: `<DefaultWordRenderer />`
 - **onWordClick**: `(word: FinalWordData, index: number, event: React.MouseEvent<SVGTextElement, MouseEvent>) => void` <br/>
@@ -653,6 +679,8 @@ export default App;
   The data object containing information about the word to be rendered. This object includes the word's text, value, fill color, font family, font size, font weight, rotation angle, and other properties.
 - **textStyle**: `React.CSSProperties` <br/>
   The style object to be applied to the text element of the word. This is useful for customizing the styles of the word's text.
+- **ref**: `React.ForwardedRef<SVGTextElement>` <br/>
+  The ref object to be set on the text element of the word. This is required for handling tooltip interactions and other events.
 
 ### AnimatedWordRenderer
 
@@ -665,6 +693,8 @@ export default App;
   Default: `(_, index) => index * 10`
 - **textStyle**: `React.CSSProperties` <br/>
   The style object to be applied to the text element of the word. This is useful for customizing the styles of the word's text.
+- **ref**: `React.ForwardedRef<SVGTextElement>` <br/>
+  The ref object to be set on the text element of the word. This is required for handling tooltip interactions and other events.
 
 ### DefaultTooltipRenderer
 
@@ -697,11 +727,124 @@ The return value of the `useWordCloud` hook is an object containing the computed
 - **isLoading**: `boolean` <br/>
   A boolean value indicating whether the layout computation is in progress. When set to `true`, the layout computation is still running, and **all** the computed words are not yet available.
 
-### Utility Functions
+### useTooltip Hook
+This hook provides a way to handle tooltip interactions with ease using `@floating-ui/react-dom`. It returns an object containing the tooltip refs and floating styles for positioning the tooltip.
 
-#### computeWordScreenPosition
-This utility function computes the screen position of a word in the word cloud layout. It takes the `TooltipRendererData` object as an argument and returns an object containing the x and y screen coordinates of the word.
-This is handy when you need to position a custom tooltip or other elements relative to a word in the word cloud.
+#### Parameters
+
+- **data***: `TooltipRendererData` <br/>
+  The data object containing information about the word for which the tooltip is being rendered. This object includes the word's text, value, fill color, font family, font size, font weight, rotation angle, the underlying SVG element, layout size, and other properties.
+- The rest of the parameters are from the `UseFloatingOptions` type provided by `@floating-ui/react-dom`.
+
+#### Return Value
+The return value of the `useTooltip` hook is an object containing the tooltip refs and floating styles for positioning the tooltip
+
+- **refs**: `TooltipRefs` <br/>
+  An object containing the refs for the tooltip elements. The `setFloating` ref should be set on the floating element of the tooltip.
+- **floatingStyles**: `React.CSSProperties` <br/>
+  The style object to be applied to the floating element of the tooltip. This is useful for customizing the styles of the floating tooltip.
+- And other properties from the `UseFloatingResult` type provided by `@floating-ui/react-dom`.
+
+### Word
+A type representing a word object to be displayed in the word cloud.
+
+#### Properties
+
+- **text***: `string` <br/>
+  The text of the word to be displayed.
+- **value***: `number` <br/>
+  The value of the word representing its weight. Words with higher values are more important and will be considered before words with lower values during layout computations.
+
+### Gradient
+A type representing a gradient object to be used for rendering words in the word cloud.
+
+#### Properties
+
+- **id***: `string` <br/>
+  The ID of the gradient.
+- **type***: `"linear" | "radial"` <br/>
+  The type of the gradient (`linear` or `radial`).
+- **angle**: `number` <br/>
+  The angle of the gradient in degrees. This property is only applicable for linear gradients.
+- **stops***: `GradientStop[]` <br/>
+  An array of gradient stop objects representing the color stops of the gradient.
+
+### GradientStop
+A type representing a gradient stop object to be used for rendering words in the word cloud.
+
+#### Properties
+
+- **offset***: `string` <br/>
+  The offset of the gradient stop. This value should be a percentage string representing the position of the stop along the gradient.
+- **color***: `string` <br/>
+  The color of the gradient stop. This value should be a valid CSS color string.
+
+### ComputedWordData
+A type representing the computed data of a word in the word cloud layout.
+
+#### Properties
+
+- All the properties of the `Word` type.
+- **x**: `number` <br/>
+  The x-coordinate of the word in the layout.
+- **y**: `number` <br/>
+  The y-coordinate of the word in the layout.
+- **size**: `number` <br/>
+  The computed font size of the word in the layout.
+- **font**: `string` <br/>
+  The computed font family of the word in the layout.
+- **weight**: `string` <br/>
+  The computed font weight of the word in the layout.
+- **rotate**: `number` <br/>
+  The computed rotation angle of the word in the layout.
+- **padding**: `number` <br/>
+  The padding between the word and its surrounding words in the layout.
+- **style**: `string` <br/>
+  The computed style object of the word in the layout.
+
+### FinalWordData
+A type representing the final data of a word that can be rendered in the word cloud.
+
+#### Properties
+
+- All the properties of the `ComputedWordData` type.
+- **fill**: `string` <br/>
+  The resolved fill color of the word in the layout.
+- **transition**: `string` <br/>
+  The resolved transition property of the word in the layout.
+
+### WordRendererData
+A type representing the data object for rendering a word in the word cloud.
+
+#### Properties
+
+- All the properties of the `FinalWordData` type.
+- **index***: `number` <br/>
+  The index of the word in the computed words array. This won't necessarily be the same as the index of the word in the original words array.
+- **onWordClick**: `(word: FinalWordData, index: number, event: React.MouseEvent<SVGTextElement, MouseEvent>) => void` <br/>
+  A function to be called when the word is clicked. This function should be invoked when the word is clicked to trigger the `onWordClick` event handler of the `WordCloud` component.
+- **onWordMouseOver**: `(word: FinalWordData, index: number, event: React.MouseEvent<SVGTextElement, MouseEvent>) => void` <br/>
+  A function to be called when the mouse hovers over the word. This function should be invoked when the mouse hovers over the word to trigger the `onWordMouseOver` event handler of the `WordCloud` component.
+- **onWordMouseOut**: `(word: FinalWordData, index: number, event: React.MouseEvent<SVGTextElement, MouseEvent>) => void` <br/>
+  A function to be called when the mouse leaves the word. This function should be invoked when the mouse leaves the word to trigger the `onWordMouseOut` event handler of the `WordCloud` component.
+
+### TooltipRendererData
+A type representing the data object for rendering a tooltip in the word cloud.
+
+#### Properties
+
+- **word**: `FinalWordData | null` <br/>
+  The final computed data of the word for which the tooltip is being rendered. This object includes information about the word's text, value, fill color, font family, font size, font weight, rotation angle, and other properties.
+- **wordElement**: `SVGTextElement | null` <br/>
+  The underlying SVG text element of the word for which the tooltip is being rendered. This element can be used to position the tooltip relative to the word.
+- **svgElement**: `SVGSVGElement` <br/>
+  The underlying SVG container element of the word cloud. This element can be used to position the tooltip relative to the word cloud.
+- **event**: `React.MouseEvent<SVGTextElement, MouseEvent> | null` <br/>
+  The mouse event that triggered the tooltip. This event can be used to handle interactions with the tooltip.
+- **layoutWidth***: `number` <br/>
+  The width of the layout container of the word cloud.
+- **layoutHeight***: `number` <br/>
+  The height of the layout container of the word cloud.
 
 ## Development & Testing
 

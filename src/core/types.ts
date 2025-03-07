@@ -2,11 +2,6 @@ import { Property } from "csstype";
 import cloud from "d3-cloud";
 import React, { ReactNode, Ref } from "react";
 
-export type Position = {
-  x: number;
-  y: number;
-};
-
 export type Word = {
   text: string;
   value: number;
