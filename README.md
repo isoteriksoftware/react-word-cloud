@@ -17,7 +17,7 @@
 - **SVG-Based:** Render crisp, scalable visuals that are responsive by design.
 
 ## Demo
-Check out the [live demo (playground)](https://react-word-cloud-demo.vercel.app/) to see `react-word-cloud` in action and explore its capabilities.
+Check out the [live demo (playground)](https://react-word-cloud-demo-next.vercel.app/) to see `react-word-cloud` in action and explore its capabilities.
 
 ## Installation
 
