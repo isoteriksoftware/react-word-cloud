@@ -19,7 +19,7 @@ Before creating bug reports, please check [this list](https://github.com/isoteri
 
 ### Suggesting Enhancements
 
-This section guides you through submitting an enhancement suggestion for react-word-cloud, including new features and minor improvements to existing functionality.
+This section guides you through submitting an enhancement suggestion for @isoterik/react-word-cloud, including new features and minor improvements to existing functionality.
 
 - Use a clear and descriptive title for the issue.
 - Provide a step-by-step description of the suggested enhancement.

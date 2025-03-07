@@ -3,7 +3,7 @@
 [![Version](https://img.shields.io/npm/v/react-word-cloud)](https://www.npmjs.com/package/react-word-cloud)
 [![Downloads](https://img.shields.io/npm/dt/react-word-cloud.svg)](https://www.npmjs.com/package/react-word-cloud)
 
-**react-word-cloud** is a lightweight and customizable React library for generating beautiful, animated word clouds. It leverages [d3-cloud](https://github.com/jasondavies/d3-cloud) for layout calculations and provides a rich set of features, including built-in support for gradients, animated word renderers, and a powerful hook for total control over rendering.
+**@isoterik/react-word-cloud** is a lightweight and customizable React library for generating beautiful, animated word clouds. It leverages [d3-cloud](https://github.com/jasondavies/d3-cloud) for layout calculations and provides a rich set of features, including built-in support for gradients, animated word renderers, and a powerful hook for total control over rendering.
 
 ## Features
 
@@ -24,9 +24,9 @@ Check out the [live demo (playground)](https://react-word-cloud-demo.vercel.app/
 Install via npm or yarn:
 
 ```bash
-npm install react-word-cloud
+npm install @isoterik/react-word-cloud
 # or
-yarn add react-word-cloud
+yarn add @isoterik/react-word-cloud
 ```
 
 ## Table of Contents
@@ -84,7 +84,7 @@ yarn add react-word-cloud
 ### Basic Example
 
 ```tsx
-import { Word, WordCloud } from "react-word-cloud";
+import { Word, WordCloud } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -122,7 +122,7 @@ export default App;
 Apply attractive linear or radial gradients to your word cloud.
 
 ```tsx
-import { Gradient, Word, WordCloud, WordCloudProps } from "react-word-cloud";
+import { Gradient, Word, WordCloud, WordCloudProps } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -184,7 +184,7 @@ export default App;
 For smooth animations on word entrance, use the built-in `AnimatedWordRenderer`. It animates opacity and scale transitions for each word.
 
 ```tsx
-import { Word, WordCloud, WordCloudProps, AnimatedWordRenderer } from "react-word-cloud";
+import { Word, WordCloud, WordCloudProps, AnimatedWordRenderer } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -221,13 +221,13 @@ export default App;
 > - If you don't want to modify any properties of the `AnimatedWordRenderer` component, you can import and use the `animatedWordRenderer` constant from the library.
 
 ### Tooltips
-**react-word-cloud** includes a default tooltip implementation (powered by floating-ui) with animated transitions. You can enable it or completely override it with your own tooltip renderer for full customization.
+**@isoterik/react-word-cloud** includes a default tooltip implementation (powered by floating-ui) with animated transitions. You can enable it or completely override it with your own tooltip renderer for full customization.
 
 #### Using the Default Tooltip
 Enable the default tooltip by setting the `enableTooltip` prop to true:
 
 ```tsx
-import { Word, WordCloud } from "react-word-cloud";
+import { Word, WordCloud } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -264,7 +264,7 @@ export default App;
 You can customize the default tooltip styles by rendering the `DefaultTooltip` component using the `renderTooltip` prop:
 
 ```tsx
-import { DefaultTooltipRenderer, Word, WordCloud, WordCloudProps } from "react-word-cloud";
+import { DefaultTooltipRenderer, Word, WordCloud, WordCloudProps } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -329,7 +329,7 @@ export default App;
 For full control over the tooltip rendering, you can provide your own custom tooltip renderer using the `renderTooltip` prop:
 
 ```tsx
-import { Word, WordCloud, WordCloudProps, TooltipRendererData, useTooltip } from "react-word-cloud";
+import { Word, WordCloud, WordCloudProps, TooltipRendererData, useTooltip } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -404,14 +404,14 @@ export default App;
 
 > **Hint**<br/>
 > - The library comes with `@floating-ui/react-dom` installed for handling tooltips, and we recommend using it for consistent and accessible floating UIs.
-> - `@floating-ui/react-dom` is not a peer dependency of `react-word-cloud`, and you can use any floating UI library of your choice but if you want to use it, the `useTooltip` hook is provided for easy integration.
+> - `@floating-ui/react-dom` is not a peer dependency of `@isoterik/react-word-cloud`, and you can use any floating UI library of your choice but if you want to use it, the `useTooltip` hook is provided for easy integration.
 > - When using the `useTooltip` hook, the `ref` for the word is configured automatically, but you still have to manage the tooltip's content and styles including setting the `ref` for the floating element (this is required).
 
 ### Event Handling
 You can handle mouse and computation events on words by providing event handlers to the `WordCloud` component:
 
 ```tsx
-import { Word, WordCloud, FinalWordData, ComputedWordData } from "react-word-cloud";
+import { Word, WordCloud, FinalWordData, ComputedWordData } from "@isoterik/react-word-cloud";
 import { useCallback } from "react";
 
 const words: Word[] = [
@@ -478,7 +478,7 @@ export default App;
 You can configure other properties of the word cloud, such as the font family, font size, and padding, by passing them as props to the `WordCloud` component:
 
 ```tsx
-import { Word, WordCloud, WordCloudProps, defaultFontSize } from "react-word-cloud";
+import { Word, WordCloud, WordCloudProps, defaultFontSize } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -555,7 +555,7 @@ export default App;
 For ultimate flexibility, use the `useWordCloud` hook to handle layout computations asynchronously while you fully control how the words are rendered and how the SVG container is structured. The hook also accepts the `timeInterval` prop to control the maximum amount of time the browser spends on computations during each timestep and also similar props accepted by the `WordCloud` component.
 
 ```tsx
-import { defaultFill, defaultFontSize, useWordCloud, Word, WordCloudProps } from "react-word-cloud";
+import { defaultFill, defaultFontSize, useWordCloud, Word, WordCloudProps } from "@isoterik/react-word-cloud";
 
 const words: Word[] = [
   { text: "React", value: 500 },
@@ -912,10 +912,10 @@ npm run test:coverage
 npm run build:local
 
 # Link the package to a local react application
-yalc link react-word-cloud
+yalc link @isoterik/react-word-cloud
 
 # Unlink the package
-yalc remove react-word-cloud
+yalc remove @isoterik/react-word-cloud
 ```
 
 ## Contributing
