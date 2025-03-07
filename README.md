@@ -1,7 +1,7 @@
 ![Preview](https://github.com/user-attachments/assets/97fdc696-b270-43ec-b7bc-8e76a519fe29)
 
-[![Version](https://img.shields.io/npm/v/react-word-cloud)](https://www.npmjs.com/package/react-word-cloud)
-[![Downloads](https://img.shields.io/npm/dt/react-word-cloud.svg)](https://www.npmjs.com/package/react-word-cloud)
+[![Version](https://img.shields.io/npm/v/@isoterik/react-word-cloud)](https://www.npmjs.com/package/@isoterik/react-word-cloud)
+[![Downloads](https://img.shields.io/npm/dt/@isoterik/react-word-cloud.svg)](https://www.npmjs.com/package/@isoterik/react-word-cloud)
 
 **@isoterik/react-word-cloud** is a lightweight and customizable React library for generating beautiful, animated word clouds. It leverages [d3-cloud](https://github.com/jasondavies/d3-cloud) for layout calculations and provides a rich set of features, including built-in support for gradients, animated word renderers, and a powerful hook for total control over rendering.
 
