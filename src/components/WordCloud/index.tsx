@@ -13,7 +13,7 @@ import {
   WordRenderer,
   WordRendererData,
 } from "../../core";
-import { Fragment, memo, SVGProps, useCallback, useMemo, useRef, useState } from "react";
+import { Fragment, memo, SVGProps, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
@@ -54,9 +54,23 @@ const Cloud = ({
 }: WordCloudProps) => {
   const { computedWords } = useWordCloud({ width, height, ...useWordCloudArgs });
   const [hoveredWord, setHoveredWord] = useState<HoveredWordData>({});
+  const [fillCacheVersion, setFillCacheVersion] = useState(0);
+  const [transitionCacheVersion, setTransitionCacheVersion] = useState(0);
 
   const svgRef = useRef<SVGSVGElement>(null);
   const wordRefs = useRef<Record<number, SVGTextElement | null>>({});
+  const fillCacheRef = useRef<Record<number, string | undefined>>({});
+  const transitionCacheRef = useRef<Record<number, string | undefined>>({});
+
+  useEffect(() => {
+    fillCacheRef.current = {};
+    setFillCacheVersion((v) => v + 1);
+  }, [fill]);
+
+  useEffect(() => {
+    transitionCacheRef.current = {};
+    setTransitionCacheVersion((v) => v + 1);
+  }, [transition]);
 
   const handleWordMouseOver = useCallback(
     (word: FinalWordData, index: number, event: WordMouseEvent) => {
@@ -95,29 +109,57 @@ const Cloud = ({
     [enableTooltip, hoveredWord, renderTooltip, width, height],
   );
 
+  const words = useMemo(() => {
+    return computedWords.map((word, index) => {
+      // Use cached fill value if available, otherwise compute and cache it.
+      let computedFill = fillCacheRef.current[index];
+      if (!computedFill) {
+        computedFill = typeof fill === "function" ? fill(word, index) : (fill as string);
+        fillCacheRef.current[index] = computedFill;
+      }
+
+      // Use cached transition value if available, otherwise compute and cache it.
+      let computedTransition = transitionCacheRef.current[index];
+      if (!computedTransition) {
+        computedTransition =
+          typeof transition === "function" ? transition(word, index) : (transition as string);
+        transitionCacheRef.current[index] = computedTransition;
+      }
+
+      const data: WordRendererData = {
+        index,
+        onWordClick,
+        onWordMouseOver: handleWordMouseOver,
+        onWordMouseOut: handleWordMouseOut,
+        fill: computedFill,
+        transition: computedTransition,
+        ...word,
+      };
+
+      const renderedWord = renderWord(data, (ref) => {
+        wordRefs.current[index] = ref;
+      });
+      return <Fragment key={index}>{renderedWord}</Fragment>;
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    computedWords,
+    fill,
+    handleWordMouseOut,
+    handleWordMouseOver,
+    onWordClick,
+    renderWord,
+    transition,
+    fillCacheVersion,
+    transitionCacheVersion,
+  ]);
+
   return (
     <>
       <svg ref={svgRef} viewBox={`0 0 ${width} ${height}`} data-testid={svgTestId} {...svgProps}>
         <GradientDefs gradients={gradients} />
 
-        <g transform={`translate(${width / 2},${height / 2})`}>
-          {computedWords.map((word, index) => {
-            const data: WordRendererData = {
-              index,
-              onWordClick,
-              onWordMouseOver: handleWordMouseOver,
-              onWordMouseOut: handleWordMouseOut,
-              fill: typeof fill === "function" ? fill(word, index) : fill,
-              transition: typeof transition === "function" ? transition(word, index) : transition,
-              ...word,
-            };
-
-            const renderedWord = renderWord(data, (ref) => {
-              wordRefs.current[index] = ref;
-            });
-            return <Fragment key={index}>{renderedWord}</Fragment>;
-          })}
-        </g>
+        <g transform={`translate(${width / 2},${height / 2})`}>{words}</g>
       </svg>
 
       {tooltip}
