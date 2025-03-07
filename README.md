@@ -694,6 +694,8 @@ export default App;
   This only applies when the `fill` prop is set to a function that returns a gradient fill.
 - **svgProps**: `Omit<SVGProps<SVGSVGElement>, "ref" | "children">` <br/>
     Additional props to be passed to the SVG container element of the word cloud. This is useful for customizing the SVG container.
+- **ref**: `React.ForwardedRef<SVGSVGElement>` <br/>
+  The ref object to be set on the SVG container element of the word cloud. This can be used to interact with the SVG container directly.
 - **enableTooltip**: `boolean` <br/>
   A boolean value indicating whether to enable the default tooltip for the words in the word cloud. When set to `true`, a tooltip will be displayed when hovering over words. <br/>
   Default: `false`
