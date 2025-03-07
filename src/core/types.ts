@@ -44,7 +44,6 @@ export type WordRendererData = FinalWordData & {
   onWordClick?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
   onWordMouseOver?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
   onWordMouseOut?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
-  onWorldTooltip?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
 };
 export type TooltipRendererData = {
   word?: FinalWordData;

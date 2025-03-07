@@ -18,16 +18,18 @@ import { GradientDefs } from "../GradientDefs";
 import isDeepEqual from "react-fast-compare";
 import { generateTestId } from "../../core/utils/test";
 
-export type WordCloudProps = UseWordCloudArgs &
-  Partial<Pick<WordRendererData, "onWordClick" | "onWordMouseOver" | "onWordMouseOut">> & {
-    fill?: FillValue;
-    transition?: TransitionValue;
-    gradients?: Gradient[];
-    renderWord?: WordRenderer;
-    enableTooltip?: boolean;
-    renderTooltip?: TooltipRenderer;
-    svgProps?: Omit<SVGProps<SVGSVGElement>, "ref" | "children">;
-  };
+export type WordCloudProps = UseWordCloudArgs & {
+  fill?: FillValue;
+  transition?: TransitionValue;
+  gradients?: Gradient[];
+  renderWord?: WordRenderer;
+  enableTooltip?: boolean;
+  renderTooltip?: TooltipRenderer;
+  svgProps?: Omit<SVGProps<SVGSVGElement>, "ref" | "children">;
+  onWordClick?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
+  onWordMouseOver?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
+  onWordMouseOut?: (word: FinalWordData, index: number, event: WordMouseEvent) => void;
+};
 
 type HoveredWordData = {
   word?: FinalWordData;
