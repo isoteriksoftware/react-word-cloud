@@ -1,7 +1,7 @@
 {
   "name": "react-word-cloud",
   "private": false,
-  "version": "1.0.0",
+  "version": "0.0.0",
   "type": "module",
   "author": "Imran Abdulmalik <imranabdulmalik01@gmail.com>",
   "description": "A lightweight, interactable and customizable React word cloud library powered by d3-cloud, featuring built-in animations, tooltips, and flexible word rendering.",
