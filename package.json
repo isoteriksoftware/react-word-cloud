@@ -24,7 +24,7 @@
   "scripts": {
     "build": "tsc -b && vite build",
     "build:local": "npm run build && npx yalc push",
-    "test": "vitest",
+    "test": "vitest run",
     "test:coverage": "vitest run --coverage",
     "lint": "eslint 'src/**/*.{ts,tsx}'",
     "lint:fix": "eslint --fix 'src/**/*.{ts,tsx}'",
