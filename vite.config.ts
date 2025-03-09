@@ -3,7 +3,6 @@ import react from "@vitejs/plugin-react";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 import tsConfigPaths from "vite-tsconfig-paths";
-import * as packageJson from "./package.json";
 
 export default defineConfig(() => ({
   base: "./",
@@ -32,16 +31,17 @@ export default defineConfig(() => ({
       fileName: (format) => `react-word-cloud.${format}.js`,
     },
     rollupOptions: {
-      external: [...Object.keys(packageJson.peerDependencies)],
+      external: ["react", "react-dom", "react/jsx-runtime"],
       output: {
         globals: {
           react: "React",
           "react-dom": "ReactDOM",
+          "react/jsx-runtime": "ReactJsxRuntime",
         },
       },
     },
   },
   optimizeDeps: {
-    exclude: [...Object.keys(packageJson.peerDependencies)],
+    exclude: ["react", "react-dom", "react/jsx-runtime"],
   },
 }));
