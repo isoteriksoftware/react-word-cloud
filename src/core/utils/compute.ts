@@ -17,6 +17,7 @@ export const computeWords = (
     fontWeight,
     fontSize,
     rotate,
+    random,
   } = config;
 
   return new Promise((resolve) => {
@@ -74,6 +75,10 @@ export const computeWords = (
 
     if (rotate) {
       layout.rotate((datum, index) => rotate(datum as ComputedWordData, index));
+    }
+
+    if (random) {
+      layout.random(random);
     }
 
     layout.on("word", (word) => {
