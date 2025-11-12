@@ -475,7 +475,7 @@ export default App;
 ```
 
 ### Configuring Other Properties
-You can configure other properties of the word cloud, such as the font family, font size, and padding, by passing them as props to the `WordCloud` component:
+You can configure other properties of the word cloud, such as the font family, font size, random number generator function and padding, by passing them as props to the `WordCloud` component:
 
 ```tsx
 import { Word, WordCloud, WordCloudProps, defaultFontSize } from "@isoterik/react-word-cloud";
@@ -534,6 +534,7 @@ function App() {
         transition="all .3s ease"
         padding={2}
         timeInterval={1}
+        random={Math.random}
         svgProps={{
           preserveAspectRatio: "xMidYMid slice",
         }}
@@ -683,6 +684,10 @@ export default App;
 - **rotate**: `(word: Word, index: number) => number` <br/>
   A function that returns the rotation angle (in degrees) for each word in the word cloud. The rotation angle is applied to the word's text. <br/>
   Default: `() => (~~(Math.random() * 6) - 3) * 30`
+- **random**: `() => number` <br/>
+  If specified, sets the internal random number generator, used for selecting the initial position of each word, and the clockwise/counterclockwise direction of the spiral for each word. <br/>
+  The specified function should return a number in the range [0, 1]. <br/>
+  Default: `Math.random`
 - **fill**: `string | (word: Word, index: number) => string` <br/>
   The fill color to be used for rendering the words. You can provide a string value for a single fill color or a function that returns a fill color based on the word and its index in the words array. <br/>
   Default: `(_, index) => scaleOrdinal(schemeCategory10)(String(index))`

@@ -24,6 +24,7 @@ export type RotateValue = Accessor<number>;
 export type FillValue = ValueOrAccessor<Property.Color>;
 export type PaddingValue = ValueOrAccessor<number>;
 export type SpiralValue = "archimedean" | "rectangular";
+export type RandomFunction = () => number;
 
 export type GradientStop = {
   offset: string;
@@ -69,4 +70,5 @@ export type WordCloudConfig = {
   fontWeight?: FontWeightValue;
   fontSize?: FontSizeValue;
   rotate?: RotateValue;
+  random?: RandomFunction;
 };
