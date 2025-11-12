@@ -475,7 +475,7 @@ export default App;
 ```
 
 ### Configuring Other Properties
-You can configure other properties of the word cloud, such as the font family, font size, randomFunction and padding, by passing them as props to the `WordCloud` component:
+You can configure other properties of the word cloud, such as the font family, font size, random number generator function and padding, by passing them as props to the `WordCloud` component:
 
 ```tsx
 import { Word, WordCloud, WordCloudProps, defaultFontSize } from "@isoterik/react-word-cloud";
